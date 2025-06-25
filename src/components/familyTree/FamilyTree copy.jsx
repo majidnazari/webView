@@ -1,18 +1,19 @@
+// FamilyTree.jsx
 import React, { useEffect, useRef, useState } from "react";
-import f3 from "family-chart";
+import f3 from "family-chart";  // npm install family-chart@0.7.0 or yarn add family-chart@0.7.0
 import "family-chart/styles/family-chart.css";
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
+// import PersonDialog from "./components/personDialog/PersonDialog";
 import SettingsDialog from "../familyTree/settingDialog/SettingsDialog";
 
 const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [treeData, setTreeData] = useState([]);
 
   const [settings, setSettings] = useState({
     orientation: "vertical",
-    cardXSpacing: 110,
+    cardXSpacing: 250,
     cardYSpacing: 150,
     transitionTime: 1000,
     miniTree: true,
@@ -21,27 +22,29 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     enableEditMode: true,
     personId: personId || "1",
     maxLevel: 2,
-    cardStyle: "imageCircle",
+    cardStyle: "imageRect",
     cardWidth: "",
     cardHeight: "",
     imageWidth: "",
     imageHeight: "",
     imageX: "",
     imageY: "",
-    cardDisplayLines: ["first_name", ""],
+    cardDisplayLines: [
+      "first_name,last_name",
+      "status",
+      ""
+    ],
   });
 
-  const { treeData: initialTreeData, loading } = useFamilyTreeData(settings.personId, settings.maxLevel);
-
-  useEffect(() => {
-    setTreeData(initialTreeData);
-  }, [initialTreeData]);
+  const { treeData, loading } = useFamilyTreeData(settings.personId, settings.maxLevel);
 
   useEffect(() => {
     if (!settings.enableEditMode) {
       setSelectedPerson(null);
     }
   }, [settings.enableEditMode]);
+
+
 
   useEffect(() => {
     if (loading || !containerRef.current || treeData.length === 0) return;
@@ -54,7 +57,9 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
       .setTransitionTime(settings.transitionTime)
       .setCardXSpacing(settings.cardXSpacing)
       .setCardYSpacing(settings.cardYSpacing)
-      .setSingleParentEmptyCard(settings.singleParentEmptyCard, { label: settings.emptyCardLabel });
+      .setSingleParentEmptyCard(settings.singleParentEmptyCard, {
+        label: settings.emptyCardLabel,
+      });
 
     settings.orientation === "vertical"
       ? f3Chart.setOrientationVertical()
@@ -63,7 +68,9 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     const f3Card = f3Chart
       .setCard(f3.CardHtml)
       .setCardDisplay(
-        settings.cardDisplayLines.map(line => line.split(",").map(f => f.trim()).filter(Boolean))
+        settings.cardDisplayLines.map(line =>
+          line.split(",").map(f => f.trim()).filter(Boolean)
+        )
       )
       .setMiniTree(settings.miniTree)
       .setStyle(settings.cardStyle)
@@ -79,56 +86,57 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     if (settings.textX) dimOptions.text_x = +settings.textX;
     if (settings.textY) dimOptions.text_y = +settings.textY;
 
+
     if (Object.keys(dimOptions).length > 0) {
       f3Card.setCardDim(dimOptions);
     }
 
+
+
     let f3EditTree = null;
 
+    // const handleCardClick = (e, d) => {
+    //   //const pId = d.data.id;
+    //   onSelect?.(d.id);
+
+    //   if (settings.enableEditMode) {
+    //     setSelectedPerson(d);
+
+    //     if (f3EditTree && !f3EditTree.isAddingRelative()) {
+    //       f3EditTree.open(d);
+    //     }
+    //   }
+
+    //   f3Card.onCardClickDefault(e, d);
+    // };
+
     const handleCardClick = (e, d) => {
-      if (!d || !d.data) return;
+      console.warn(" node selected:", d);
+
+      if (!d || !d.data) {
+        console.warn("Invalid node clicked:", d);
+        return;
+      }
 
       const person = d.data?.data;
-      if (!person || !person.id) return;
+      if (!person || !person.id) {
+        console.warn("Invalid person object");
+        return;
+      }
 
-      const idToRemove = person.id;
-      //if (!window.confirm(`Are you sure you want to delete this person?`)) return;
+      onSelect?.(person); // pass full person object
 
-      // Deep copy to avoid mutating existing state
-      let updatedTreeData = JSON.parse(JSON.stringify(treeData));
+      if (settings.enableEditMode) {
+        setSelectedPerson(d);
 
-      // Remove person entirely
-      updatedTreeData = updatedTreeData.filter(node => node.id !== idToRemove);
-
-      // Cleanup references from others
-      updatedTreeData = updatedTreeData.map(node => {
-        if (node.rels) {
-          const rels = { ...node.rels };
-
-          if (rels.father === idToRemove) delete rels.father;
-          if (rels.mother === idToRemove) delete rels.mother;
-
-          if (Array.isArray(rels.spouses)) {
-            rels.spouses = rels.spouses.filter(spouseId => spouseId !== idToRemove);
-            if (rels.spouses.length === 0) delete rels.spouses;
-          }
-
-          if (Array.isArray(rels.children)) {
-            rels.children = rels.children.filter(childId => childId !== idToRemove);
-            if (rels.children.length === 0) delete rels.children;
-          }
-
-          return { ...node, rels };
+        if (f3EditTree && !f3EditTree.isAddingRelative()) {
+          f3EditTree.open(d);
         }
-        return node;
-      });
-
-      setTreeData(updatedTreeData);
-      setSelectedPerson(null);
-      onSelect?.(person);
+      }
 
       f3Card.onCardClickDefault(e, d);
     };
+
 
     f3Card.setOnCardClick(handleCardClick);
 
@@ -140,13 +148,19 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
           "first_name", "last_name", "gender", "id",
           "avatar", "birth_date", "death_date", "is_owner", "status"
         ])
-        .setEditFirst(true)
-        .setNoEdit();
+        .setEditFirst(true);
+
+      //f3EditTree.setEdit();
+      f3EditTree.setNoEdit();
+      //f3EditTree.open(f3Chart.getMainDatum());
 
       const mainDatum = f3Chart.getMainDatum();
       if (mainDatum && mainDatum.data) {
         f3EditTree.open(mainDatum);
+      } else {
+        console.warn("getMainDatum returned invalid data:", mainDatum);
       }
+
     }
 
     f3Chart.updateTree({ initial: true });
@@ -159,6 +173,13 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
       </div>
 
       <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
+
+      {/* {settings.enableEditMode && selectedPerson && (
+        <PersonDialog
+          personData={selectedPerson}
+          onClose={() => setSelectedPerson(null)}
+        />
+      )} */}
 
       <SettingsDialog
         open={showSettings}
