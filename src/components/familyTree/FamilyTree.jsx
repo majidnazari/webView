@@ -1,15 +1,13 @@
-// FamilyTree.jsx
 import React, { useEffect, useRef, useState } from "react";
-import f3 from "family-chart";  // npm install family-chart@0.7.0 or yarn add family-chart@0.7.0
+import f3 from "family-chart";
 import "family-chart/styles/family-chart.css";
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
-// import PersonDialog from "./components/personDialog/PersonDialog";
 import SettingsDialog from "../familyTree/settingDialog/SettingsDialog";
 
 const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   const containerRef = useRef(null);
-  const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const [settings, setSettings] = useState({
     orientation: "vertical",
@@ -29,22 +27,10 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     imageHeight: "",
     imageX: "",
     imageY: "",
-    cardDisplayLines: [
-      "first_name,last_name",
-      "status",
-      ""
-    ],
+    cardDisplayLines: ["first_name,last_name", "status", ""],
   });
 
   const { treeData, loading } = useFamilyTreeData(settings.personId, settings.maxLevel);
-
-  useEffect(() => {
-    if (!settings.enableEditMode) {
-      setSelectedPerson(null);
-    }
-  }, [settings.enableEditMode]);
-
-
 
   useEffect(() => {
     if (loading || !containerRef.current || treeData.length === 0) return;
@@ -86,82 +72,29 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     if (settings.textX) dimOptions.text_x = +settings.textX;
     if (settings.textY) dimOptions.text_y = +settings.textY;
 
-
     if (Object.keys(dimOptions).length > 0) {
       f3Card.setCardDim(dimOptions);
     }
 
-
-
-    let f3EditTree = null;
-
-    // const handleCardClick = (e, d) => {
-    //   //const pId = d.data.id;
-    //   onSelect?.(d.id);
-
-    //   if (settings.enableEditMode) {
-    //     setSelectedPerson(d);
-
-    //     if (f3EditTree && !f3EditTree.isAddingRelative()) {
-    //       f3EditTree.open(d);
-    //     }
-    //   }
-
-    //   f3Card.onCardClickDefault(e, d);
-    // };
-
-    const handleCardClick = (e, d) => {
-      console.warn(" node selected:", d);
-
-      if (!d || !d.data) {
-        console.warn("Invalid node clicked:", d);
-        return;
-      }
-
+    f3Card.setOnCardClick((e, d) => {
+      if (!d || !d.data) return;
       const person = d.data?.data;
-      if (!person || !person.id) {
-        console.warn("Invalid person object");
-        return;
+      if (!person || !person.id) return;
+
+      setSelectedId(person.id);
+      onSelect?.(person.id);
+
+      // Remove existing highlights
+      container.querySelectorAll(".card.selected-card").forEach(card => {
+        card.classList.remove("selected-card");
+      });
+
+      // Highlight clicked card by data-id
+      const clickedCard = container.querySelector(`.card[data-id="${person.id}"]`);
+      if (clickedCard) {
+        clickedCard.classList.add("selected-card");
       }
-
-      onSelect?.(person); // pass full person object
-
-      if (settings.enableEditMode) {
-        setSelectedPerson(d);
-
-        if (f3EditTree && !f3EditTree.isAddingRelative()) {
-          f3EditTree.open(d);
-        }
-      }
-
-      f3Card.onCardClickDefault(e, d);
-    };
-
-
-    f3Card.setOnCardClick(handleCardClick);
-
-    if (settings.enableEditMode) {
-      f3EditTree = f3Chart
-        .editTree()
-        .fixed(true)
-        .setFields([
-          "first_name", "last_name", "gender", "id",
-          "avatar", "birth_date", "death_date", "is_owner", "status"
-        ])
-        .setEditFirst(true);
-
-      //f3EditTree.setEdit();
-      f3EditTree.setNoEdit();
-      //f3EditTree.open(f3Chart.getMainDatum());
-
-      const mainDatum = f3Chart.getMainDatum();
-      if (mainDatum && mainDatum.data) {
-        f3EditTree.open(mainDatum);
-      } else {
-        console.warn("getMainDatum returned invalid data:", mainDatum);
-      }
-
-    }
+    });
 
     f3Chart.updateTree({ initial: true });
   }, [treeData, loading, settings]);
@@ -174,19 +107,28 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
 
       <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
 
-      {/* {settings.enableEditMode && selectedPerson && (
-        <PersonDialog
-          personData={selectedPerson}
-          onClose={() => setSelectedPerson(null)}
-        />
-      )} */}
-
       <SettingsDialog
         open={showSettings}
         onClose={() => setShowSettings(false)}
         settings={settings}
         onChange={setSettings}
       />
+
+      <style>
+        {`
+          .card.selected-card {
+            border: 3px solid red;
+            box-shadow: 0 0 10px red;
+          }
+
+          .f3-card[data-gender="male"] {
+            background-color: white !important;
+          }
+          .f3-card[data-gender="female"] {
+            background-color: white !important;
+          }
+        `}
+      </style>
     </>
   );
 };
