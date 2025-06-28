@@ -1,12 +1,12 @@
 // FamilyTree.jsx
 import React, { useEffect, useRef, useState } from "react";
 import f3 from "family-chart";  // npm install family-chart@0.7.0 or yarn add family-chart@0.7.0
-import "family-chart/styles/family-chart.css";
+import "family-chart/styles/family-chart.css1";
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
 // import PersonDialog from "./components/personDialog/PersonDialog";
 import SettingsDialog from "./settingDialog/SettingsDialog";
 
-const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
+const FamilyTree_main = ({ chartId, personId, onSelect, treeType = "left" }) => {
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
@@ -95,6 +95,21 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
 
     let f3EditTree = null;
 
+    // const handleCardClick = (e, d) => {
+    //   //const pId = d.data.id;
+    //   onSelect?.(d.id);
+
+    //   if (settings.enableEditMode) {
+    //     setSelectedPerson(d);
+
+    //     if (f3EditTree && !f3EditTree.isAddingRelative()) {
+    //       f3EditTree.open(d);
+    //     }
+    //   }
+
+    //   f3Card.onCardClickDefault(e, d);
+    // };
+
     const handleCardClick = (e, d) => {
       console.warn(" node selected:", d);
 
@@ -157,15 +172,7 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
       </div>
 
-      <div
-        className="f3 f3-cont"
-        id={chartId}
-        ref={containerRef}
-        style={{
-          "--female-color": "#DC0828FF",
-          "--male-color": "#1508CFFF",
-        }}
-      ></div>
+      <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
 
       {/* {settings.enableEditMode && selectedPerson && (
         <PersonDialog
@@ -184,4 +191,4 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   );
 };
 
-export default FamilyTree;
+export default FamilyTree_main;

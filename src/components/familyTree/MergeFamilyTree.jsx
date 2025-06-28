@@ -4,9 +4,9 @@ import f3 from "family-chart";  // npm install family-chart@0.7.0 or yarn add fa
 import "family-chart/styles/family-chart.css";
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
 // import PersonDialog from "./components/personDialog/PersonDialog";
-import SettingsDialog from "../familyTree/settingDialog/SettingsDialog";
+import SettingsDialog from "./settingDialog/SettingsDialog";
 
-const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
+const MergeFamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
@@ -95,21 +95,6 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
 
     let f3EditTree = null;
 
-    // const handleCardClick = (e, d) => {
-    //   //const pId = d.data.id;
-    //   onSelect?.(d.id);
-
-    //   if (settings.enableEditMode) {
-    //     setSelectedPerson(d);
-
-    //     if (f3EditTree && !f3EditTree.isAddingRelative()) {
-    //       f3EditTree.open(d);
-    //     }
-    //   }
-
-    //   f3Card.onCardClickDefault(e, d);
-    // };
-
     const handleCardClick = (e, d) => {
       console.warn(" node selected:", d);
 
@@ -191,4 +176,4 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   );
 };
 
-export default FamilyTree;
+export default MergeFamilyTree;

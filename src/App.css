@@ -57,3 +57,13 @@ body,
   height: 100%;
   overflow: hidden;
 }
+
+
+
+:root {
+  --female-color: #ffb6c1 !important;
+  --male-color: #add8e6 !important;
+  --genderless-color: #d3d3d3 !important;
+  --background-color: #fff !important;
+  --text-color: #000 !important;
+}
