@@ -1,9 +1,7 @@
-// FamilyTree.jsx
 import React, { useEffect, useRef, useState } from "react";
-import f3 from "family-chart";  // npm install family-chart@0.7.0 or yarn add family-chart@0.7.0
+import f3 from "family-chart";
 import "family-chart/styles/family-chart.css";
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
-// import PersonDialog from "./components/personDialog/PersonDialog";
 import SettingsDialog from "./settingDialog/SettingsDialog";
 
 const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
@@ -19,7 +17,8 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     miniTree: true,
     singleParentEmptyCard: true,
     emptyCardLabel: "ADD",
-    enableEditMode: true,
+    enableEditMode: false,
+    freezeTreeTree: false, // <-- NEW freezeTree flag
     personId: personId || "1",
     maxLevel: 2,
     cardStyle: "imageRect",
@@ -39,12 +38,10 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   const { treeData, loading } = useFamilyTreeData(settings.personId, settings.maxLevel);
 
   useEffect(() => {
-    if (!settings.enableEditMode) {
+    if (settings.freezeTree) {
       setSelectedPerson(null);
     }
-  }, [settings.enableEditMode]);
-
-
+  }, [settings.freezeTree]);
 
   useEffect(() => {
     if (loading || !containerRef.current || treeData.length === 0) return;
@@ -86,42 +83,34 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     if (settings.textX) dimOptions.text_x = +settings.textX;
     if (settings.textY) dimOptions.text_y = +settings.textY;
 
-
     if (Object.keys(dimOptions).length > 0) {
       f3Card.setCardDim(dimOptions);
     }
 
-
-
     let f3EditTree = null;
 
     const handleCardClick = (e, d) => {
-      console.warn(" node selected:", d);
 
-      if (!d || !d.data) {
-        console.warn("Invalid node clicked:", d);
-        return;
-      }
+      //alert(settings.freezeTree);
+      if (!d || !d.data) return;
 
       const person = d.data?.data;
-      if (!person || !person.id) {
-        console.warn("Invalid person object");
+      if (!person || !person.id) return;
+
+      if (settings.freezeTree) {
+        // 🔒 Frozen mode: Do nothing
         return;
       }
 
-      onSelect?.(person); // pass full person object
+      onSelect?.(person);
+      setSelectedPerson(d);
 
-      if (settings.enableEditMode) {
-        setSelectedPerson(d);
-
-        if (f3EditTree && !f3EditTree.isAddingRelative()) {
-          f3EditTree.open(d);
-        }
+      if (settings.enableEditMode && f3EditTree && !f3EditTree.isAddingRelative()) {
+        f3EditTree.open(d);
       }
 
       f3Card.onCardClickDefault(e, d);
     };
-
 
     f3Card.setOnCardClick(handleCardClick);
 
@@ -133,19 +122,13 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
           "first_name", "last_name", "gender", "id",
           "avatar", "birth_date", "death_date", "is_owner", "status"
         ])
-        .setEditFirst(true);
-
-      //f3EditTree.setEdit();
-      f3EditTree.setNoEdit();
-      //f3EditTree.open(f3Chart.getMainDatum());
+        .setEditFirst(true)
+        .setNoEdit();
 
       const mainDatum = f3Chart.getMainDatum();
       if (mainDatum && mainDatum.data) {
         f3EditTree.open(mainDatum);
-      } else {
-        console.warn("getMainDatum returned invalid data:", mainDatum);
       }
-
     }
 
     f3Chart.updateTree({ initial: true });
@@ -157,22 +140,7 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
       </div>
 
-      <div
-        className="f3 f3-cont"
-        id={chartId}
-        ref={containerRef}
-        style={{
-          "--female-color": "#DC0828FF",
-          "--male-color": "#1508CFFF",
-        }}
-      ></div>
-
-      {/* {settings.enableEditMode && selectedPerson && (
-        <PersonDialog
-          personData={selectedPerson}
-          onClose={() => setSelectedPerson(null)}
-        />
-      )} */}
+      <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
 
       <SettingsDialog
         open={showSettings}

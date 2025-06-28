@@ -1,7 +1,7 @@
 // FamilyTree.jsx
 import React, { useEffect, useRef, useState } from "react";
 import f3 from "family-chart";  // npm install family-chart@0.7.0 or yarn add family-chart@0.7.0
-import "family-chart/styles/family-chart.css1";
+import "family-chart/styles/family-chart.css";
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
 // import PersonDialog from "./components/personDialog/PersonDialog";
 import SettingsDialog from "./settingDialog/SettingsDialog";
@@ -19,7 +19,7 @@ const FamilyTree_main = ({ chartId, personId, onSelect, treeType = "left" }) => 
     miniTree: true,
     singleParentEmptyCard: true,
     emptyCardLabel: "ADD",
-    enableEditMode: true,
+    enableEditMode: false,
     personId: personId || "1",
     maxLevel: 2,
     cardStyle: "imageRect",
@@ -123,6 +123,10 @@ const FamilyTree_main = ({ chartId, personId, onSelect, treeType = "left" }) => 
         console.warn("Invalid person object");
         return;
       }
+      if (!settings.enableEditMode) {
+        // 🔒 Frozen mode: Just alert and do nothing else
+        return;
+      }
 
       onSelect?.(person); // pass full person object
 
@@ -173,6 +177,22 @@ const FamilyTree_main = ({ chartId, personId, onSelect, treeType = "left" }) => 
       </div>
 
       <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
+
+      {/* <div
+        className="f3 f3-cont"
+        id={chartId}
+        ref={containerRef}
+        style={{
+          "--female-color": "#E63946",
+          "--male-color": "#457B9D",
+          "--genderless-color": "#A8DADC",
+          "--background-color": "#000",
+          "--text-color": "#fff",
+          userSelect: isFrozen ? "text" : "none",
+          pointerEvents: "auto",
+        }}
+      ></div> */}
+
 
       {/* {settings.enableEditMode && selectedPerson && (
         <PersonDialog

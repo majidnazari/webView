@@ -119,17 +119,30 @@ const SettingsDialog = ({ open, onClose, settings, onChange }) => {
 
           <br /><br />
 
-          <label>
-            <input
-              type="checkbox"
-              name="enableEditMode"
-              checked={settings.enableEditMode}
-              onChange={handleInputChange}
-            />
-            Enable Edit Mode
-          </label>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <label>
+              <input
+                type="checkbox"
+                name="enableEditMode"
+                checked={settings.enableEditMode}
+                onChange={handleInputChange}
+              />
+              Enable Edit Mode
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="freezeTree"
+                checked={settings.freezeTree}
+                onChange={handleInputChange}
+              />
+              Freeze Tree
+            </label>
+          </div>
 
           <br /><br />
+
 
           <label>Orientation:</label>
           <select name="orientation" value={settings.orientation} onChange={handleInputChange}>
