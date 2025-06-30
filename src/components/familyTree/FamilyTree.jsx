@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import f3 from "family-chart";
 import "family-chart/styles/family-chart.css";
-import "../../assets/familyTreeCustom.css"
+import "../../assets/familyTreeCustom.css";
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
 import SettingsDialog from "./settingDialog/SettingsDialog";
+
+import manTmp from "../../assets/images/man_tmp.jpg";
+import womanTmp from "../../assets/images/woman_tmp.jpg";
 
 const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   const containerRef = useRef(null);
@@ -19,7 +22,7 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     singleParentEmptyCard: true,
     emptyCardLabel: "ADD",
     enableEditMode: false,
-    freezeTreeTree: false, // <-- NEW freezeTree flag
+    freezeTreeTree: false,
     personId: personId || "1",
     maxLevel: 2,
     cardStyle: "imageCircle",
@@ -30,7 +33,8 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     imageX: "",
     imageY: "",
     cardDisplayLines: [
-      "first_name",""
+      "first_name",
+      ""
     ],
   });
 
@@ -45,11 +49,23 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   useEffect(() => {
     if (loading || !containerRef.current || treeData.length === 0) return;
 
+    // Inject default avatars where missing
+    const processedData = treeData.map(person => {
+      if (!person.data.avatar) {
+        if (person.data.gender === "M") {
+          person.data.avatar = manTmp;
+        } else if (person.data.gender === "F") {
+          person.data.avatar = womanTmp;
+        }
+      }
+      return person;
+    });
+
     const container = containerRef.current;
     container.innerHTML = "";
 
     const f3Chart = f3
-      .createChart(container, treeData)
+      .createChart(container, processedData)
       .setTransitionTime(settings.transitionTime)
       .setCardXSpacing(settings.cardXSpacing)
       .setCardYSpacing(settings.cardYSpacing)
@@ -89,15 +105,12 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     let f3EditTree = null;
 
     const handleCardClick = (e, d) => {
-
-      //alert(settings.freezeTree);
       if (!d || !d.data) return;
 
       const person = d.data?.data;
       if (!person || !person.id) return;
 
       if (settings.freezeTree) {
-        // 🔒 Frozen mode: Do nothing
         return;
       }
 
