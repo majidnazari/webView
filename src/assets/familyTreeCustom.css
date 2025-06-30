@@ -1,0 +1,43 @@
+/* Example of overriding family-chart styles */
+.f3.f3-cont {
+    background-color: #88939d !important;
+    border: 2px solid #180d0d !important;
+    padding: 10px;
+}
+
+/* Override card styles */
+.f3 .f3-card {
+    background-color: #9c09b9 !important;
+    border: 1px solid #333 !important;
+    color: #333 !important;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Change text color */
+.f3 .f3-card .f3-text {
+    color: #2a2a2a !important;
+    font-weight: bold;
+}
+
+/* Example: highlight selected person */
+.f3 .f3-card.selected {
+    background-color: #cce5ff !important;
+    border-color: #3399ff !important;
+}
+
+.f3 div.card-image-circle div.card-label {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    max-width: 150%;
+    min-height: 22px;
+    text-align: center;
+    background-color: rgba(231, 222, 222, 0);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 3px;
+    padding: 0 5px;
+}

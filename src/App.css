@@ -66,4 +66,9 @@ body,
   --genderless-color: #d3d3d3 !important;
   --background-color: #fff !important;
   --text-color: #000 !important;
+
+}
+
+div.card-label {
+  background-color: hsla(268, 79%, 32%, 0.96);
 }

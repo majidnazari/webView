@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import f3 from "family-chart";
 import "family-chart/styles/family-chart.css";
+import "../../assets/familyTreeCustom.css"
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
 import SettingsDialog from "./settingDialog/SettingsDialog";
 
@@ -11,7 +12,7 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
 
   const [settings, setSettings] = useState({
     orientation: "vertical",
-    cardXSpacing: 250,
+    cardXSpacing: 110,
     cardYSpacing: 150,
     transitionTime: 1000,
     miniTree: true,
@@ -21,17 +22,15 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     freezeTreeTree: false, // <-- NEW freezeTree flag
     personId: personId || "1",
     maxLevel: 2,
-    cardStyle: "imageRect",
+    cardStyle: "imageCircle",
     cardWidth: "",
-    cardHeight: "",
+    cardHeight: 100,
     imageWidth: "",
     imageHeight: "",
     imageX: "",
     imageY: "",
     cardDisplayLines: [
-      "first_name,last_name",
-      "status",
-      ""
+      "first_name",""
     ],
   });
 
