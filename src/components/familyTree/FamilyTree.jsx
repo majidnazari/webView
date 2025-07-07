@@ -24,17 +24,17 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     enableEditMode: false,
     freezeTreeTree: false,
     personId: personId || "1",
-    maxLevel: 2,
-    cardStyle: "imageCircle",
+    maxLevel: 3,
+    cardStyle: "imageRectangular",
     cardWidth: "",
-    cardHeight: 100,
+    cardHeight: 104,
     imageWidth: "",
-    imageHeight: "",
+    imageHeight: 80,
     imageX: "",
-    imageY: "",
+    imageY: -4,
     cardDisplayLines: [
       "first_name",
-      ""
+      "birth_date",
     ],
   });
 

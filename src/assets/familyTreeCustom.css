@@ -28,10 +28,10 @@
 
 .f3 div.card-image-circle div.card-label {
     position: absolute;
-    bottom: -10px;
-    left: 50%;
+    bottom: 10px;
+    left: 10%;
     transform: translate(-50%, 50%);
-    max-width: 150%;
+    max-width: 100%;
     min-height: 22px;
     text-align: center;
     background-color: rgba(231, 222, 222, 0);
@@ -40,4 +40,20 @@
     white-space: nowrap;
     border-radius: 3px;
     padding: 0 5px;
+}
+
+.f3 div.card-image-rect {
+    width: 90px;
+    min-height: 200px;
+    display: grid;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.f3 div.card-image-rect div.card-label {
+    height: 100%;
+    overflow: hidden;
+    display: contents;
+    flex-direction: column;
+    justify-content: center;
 }
