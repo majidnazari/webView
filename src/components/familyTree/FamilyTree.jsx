@@ -5,8 +5,11 @@ import "../../assets/familyTreeCustom.css";
 import useFamilyTreeData from "../../hooks/useFamilyTreeData";
 import SettingsDialog from "./settingDialog/SettingsDialog";
 
-import manTmp from "../../assets/images/man_tmp.jpg";
-import womanTmp from "../../assets/images/woman_tmp.jpg";
+import manTmp from "../../assets/images/1.jpg";
+import womanTmp from "../../assets/images/2.jpg";
+
+import avater_male from "../../assets/images/avater_male.jpg";
+import avatar_female from "../../assets/images/avatar_female.jpg";
 
 const FamilyTree = ({ chartId, onSelect }) => {
   const containerRef = useRef(null);
@@ -114,12 +117,23 @@ const FamilyTree = ({ chartId, onSelect }) => {
     if (loading || !containerRef.current || treeData.length === 0) return;
 
     const processedData = treeData.map((person) => {
-      if (!person.data.avatar) {
-        if (person.data.gender === "M") person.data.avatar = manTmp;
-        else if (person.data.gender === "F") person.data.avatar = womanTmp;
+      const { id, gender, avatar } = person.data;
+
+      if (id === "1") {
+        person.data.avatar = manTmp;
+      } else if (id === "4") {
+        person.data.avatar = womanTmp;
+      } else if (!avatar) {
+        if (gender === "M") {
+          person.data.avatar = avater_male;
+        } else if (gender === "F") {
+          person.data.avatar = avatar_female;
+        }
       }
+
       return person;
     });
+
 
     const container = containerRef.current;
     container.innerHTML = "";
