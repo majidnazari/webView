@@ -16,7 +16,7 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
   const [settings, setSettings] = useState({
     orientation: "vertical",
     cardXSpacing: 110,
-    cardYSpacing: 150,
+    cardYSpacing: 160,
     transitionTime: 1000,
     miniTree: true,
     singleParentEmptyCard: true,
@@ -26,15 +26,15 @@ const FamilyTree = ({ chartId, personId, onSelect, treeType = "left" }) => {
     personId: personId || "1",
     maxLevel: 3,
     cardStyle: "imageRectangular",
-    cardWidth: "",
-    cardHeight: 104,
-    imageWidth: "",
-    imageHeight: 80,
+    cardWidth: 90,
+    cardHeight: 130,
+    imageWidth: 90,
+    imageHeight: 90,
     imageX: "",
-    imageY: -4,
+    imageY: "",
     cardDisplayLines: [
       "first_name",
-      "birth_date",
+      "birth_date,death_date",
     ],
   });
 

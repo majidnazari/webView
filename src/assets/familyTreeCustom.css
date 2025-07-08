@@ -1,6 +1,6 @@
 /* Example of overriding family-chart styles */
 .f3.f3-cont {
-    background-color: #88939d !important;
+    background-color: #000000 !important;
     border: 2px solid #180d0d !important;
     padding: 10px;
 }
@@ -29,11 +29,11 @@
 .f3 div.card-image-circle div.card-label {
     position: absolute;
     bottom: 10px;
-    left: 10%;
+    left: 50%;
     transform: translate(-50%, 50%);
     max-width: 100%;
     min-height: 22px;
-    text-align: center;
+    text-align: right;
     background-color: rgba(231, 222, 222, 0);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -43,11 +43,9 @@
 }
 
 .f3 div.card-image-rect {
-    width: 90px;
-    min-height: 200px;
-    display: grid;
-    align-items: center;
-    border-radius: 5px;
+    display: revert-layer;
+    border-radius: 7px;
+    text-align: center;
 }
 
 .f3 div.card-image-rect div.card-label {
@@ -56,4 +54,11 @@
     display: contents;
     flex-direction: column;
     justify-content: center;
+}
+
+.f3 div.card {
+    cursor: pointer;
+    color: var(--text-color);
+    position: relative;
+    line-height: 1.13;
 }

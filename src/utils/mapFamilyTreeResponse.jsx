@@ -5,6 +5,10 @@ const mapFamilyTreeResponse = (personData) => {
         if (!person || !person.id) return;
 
         gender = person.gender === 0 ? "F" : person.gender === 1 ? "M" : defaultGender;
+        const extractYear = (dateStr) => {
+            if (!dateStr) return null;
+            return dateStr.toString().slice(0, 4);
+        };
 
         if (!nodes.has(person.id)) {
 
@@ -14,11 +18,11 @@ const mapFamilyTreeResponse = (personData) => {
                     "id": person.id,
                     "first_name": person.first_name,
                     "last_name": person.last_name,
-                    "birth_date": person.birth_date,
-                    "death_date": person.death_date,
+                    "birth_date": extractYear(person.birth_date),
+                    "death_date": extractYear(person.death_date),
                     "is_owner": person.is_owner,
                     "status": person.status,
-                    "avatar":null,
+                    "avatar": null,
                     gender,
 
                 },
