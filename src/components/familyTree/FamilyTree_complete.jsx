@@ -8,21 +8,10 @@ import SettingsDialog from "./settingDialog/SettingsDialog";
 import manTmp from "../../assets/images/man_tmp.jpg";
 import womanTmp from "../../assets/images/woman_tmp.jpg";
 
-const FamilyTree = ({ chartId, onSelect }) => {
+const FamilyTree_complete = ({ chartId, personId, onSelect, treeType = "left" }) => {
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-
-  const [config, setConfig] = useState({
-    token: "",
-    personIdLeft: "1",
-    personIdRight: "",
-    freezeLeftTree: false,
-    freezeRightTree: false,
-    maxLevelLeft: 3,
-    maxLevelRight: 3,
-    mode: "single", // or "merged"
-  });
 
   const [settings, setSettings] = useState({
     orientation: "vertical",
@@ -33,8 +22,8 @@ const FamilyTree = ({ chartId, onSelect }) => {
     singleParentEmptyCard: true,
     emptyCardLabel: "ADD",
     enableEditMode: false,
-    freezeTree: false,
-    personId: "1",
+    freezeTreeTree: false,
+    personId: personId || "1",
     maxLevel: 3,
     cardStyle: "imageRectangular",
     cardWidth: 90,
@@ -43,66 +32,13 @@ const FamilyTree = ({ chartId, onSelect }) => {
     imageHeight: 90,
     imageX: "",
     imageY: "",
-    cardDisplayLines: ["first_name", "birth_date,death_date"],
+    cardDisplayLines: [
+      "first_name",
+      "birth_date,death_date",
+    ],
   });
 
-  // Receive settings from Flutter
-  useEffect(() => {
-    const handleMessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.token && data.personIdLeft) {
-          setConfig({
-            token: data.token,
-            personIdLeft: data.personIdLeft,
-            personIdRight: data.personIdRight || "",
-            freezeLeftTree: !!data.freezeLeftTree,
-            freezeRightTree: !!data.freezeRightTree,
-            maxLevelLeft: data.maxLevelLeft || 3,
-            maxLevelRight: data.maxLevelRight || 3,
-            mode: data.mode || "single",
-          });
-        }
-      } catch (err) {
-        console.warn("Invalid message from Flutter:", err);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
-
-  // Sync config to settings
-  useEffect(() => {
-    const activePersonId =
-      config.mode === "left" || config.mode === "single"
-        ? config.personIdLeft
-        : config.personIdRight;
-
-    const activeMaxLevel =
-      config.mode === "left" || config.mode === "single"
-        ? config.maxLevelLeft
-        : config.maxLevelRight;
-
-    const activeFreeze =
-      config.mode === "left" || config.mode === "single"
-        ? config.freezeLeftTree
-        : config.freezeRightTree;
-
-    setSettings((prev) => ({
-      ...prev,
-      token: config.token,
-      personId: activePersonId,
-      maxLevel: activeMaxLevel,
-      freezeTree: activeFreeze,
-    }));
-  }, [config]);
-
-  const { treeData, loading } = useFamilyTreeData(
-    settings.personId,
-    settings.maxLevel,
-    settings.token
-  );
+  const { treeData, loading } = useFamilyTreeData(settings.personId, settings.maxLevel);
 
   useEffect(() => {
     if (settings.freezeTree) {
@@ -113,10 +49,14 @@ const FamilyTree = ({ chartId, onSelect }) => {
   useEffect(() => {
     if (loading || !containerRef.current || treeData.length === 0) return;
 
-    const processedData = treeData.map((person) => {
+    // Inject default avatars where missing
+    const processedData = treeData.map(person => {
       if (!person.data.avatar) {
-        if (person.data.gender === "M") person.data.avatar = manTmp;
-        else if (person.data.gender === "F") person.data.avatar = womanTmp;
+        if (person.data.gender === "M") {
+          person.data.avatar = manTmp;
+        } else if (person.data.gender === "F") {
+          person.data.avatar = womanTmp;
+        }
       }
       return person;
     });
@@ -140,8 +80,8 @@ const FamilyTree = ({ chartId, onSelect }) => {
     const f3Card = f3Chart
       .setCard(f3.CardHtml)
       .setCardDisplay(
-        settings.cardDisplayLines.map((line) =>
-          line.split(",").map((f) => f.trim()).filter(Boolean)
+        settings.cardDisplayLines.map(line =>
+          line.split(",").map(f => f.trim()).filter(Boolean)
         )
       )
       .setMiniTree(settings.miniTree)
@@ -164,37 +104,17 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
     let f3EditTree = null;
 
-    // const handleCardClick = (e, d) => {
-    //   if (!d || !d.data) return;
-    //   const person = d.data?.data;
-    //   if (!person || !person.id) return;
-
-    //   if (settings.freezeTree) return;
-
-    //   // Show ID and name on card click
-    //   onSelect?.({ id: person.id, name: person.first_name + " " + person.last_name });
-    //   setSelectedPerson(d);
-
-    //   if (settings.enableEditMode && f3EditTree && !f3EditTree.isAddingRelative()) {
-    //     f3EditTree.open(d);
-    //   }
-
-    //   f3Card.onCardClickDefault(e, d);
-    // };
-
     const handleCardClick = (e, d) => {
       if (!d || !d.data) return;
+
       const person = d.data?.data;
       if (!person || !person.id) return;
 
-      if (settings.freezeTree) return;
+      if (settings.freezeTree) {
+        return;
+      }
 
-      window.FlutterBridge?.postMessage(JSON.stringify({
-        type: "personSelected",
-        personId: person.id,
-        fullName: person.first_name + " " + person.last_name,
-      }));
-
+      onSelect?.(person);
       setSelectedPerson(d);
 
       if (settings.enableEditMode && f3EditTree && !f3EditTree.isAddingRelative()) {
@@ -203,7 +123,6 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
       f3Card.onCardClickDefault(e, d);
     };
-
 
     f3Card.setOnCardClick(handleCardClick);
 
@@ -219,7 +138,9 @@ const FamilyTree = ({ chartId, onSelect }) => {
         .setNoEdit();
 
       const mainDatum = f3Chart.getMainDatum();
-      if (mainDatum && mainDatum.data) f3EditTree.open(mainDatum);
+      if (mainDatum && mainDatum.data) {
+        f3EditTree.open(mainDatum);
+      }
     }
 
     f3Chart.updateTree({ initial: true });
@@ -227,16 +148,12 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
   return (
     <>
-      {/* Flutter-controlled app: comment out settings UI */}
-      {/* 
       <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
-      </div> 
-      */}
+      </div>
 
       <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
 
-      {/* Settings dialog kept for potential future use */}
       <SettingsDialog
         open={showSettings}
         onClose={() => setShowSettings(false)}
@@ -247,4 +164,4 @@ const FamilyTree = ({ chartId, onSelect }) => {
   );
 };
 
-export default FamilyTree;
+export default FamilyTree_complete;
