@@ -61,7 +61,7 @@ const FamilyTree = ({ chartId, onSelect }) => {
             personIdRight: data.personIdRight || "",
             freezeLeftTree: !!data.freezeLeftTree,
             freezeRightTree: !!data.freezeRightTree,
-            maxLevelLeft: data.maxLevelLeft || 3,
+            maxLevelLeft: data.maxLevelLeft || 5,
             maxLevelRight: data.maxLevelRight || 3,
             mode: data.mode || "single",
           });

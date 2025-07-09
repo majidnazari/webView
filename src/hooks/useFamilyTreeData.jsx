@@ -53,7 +53,7 @@ const useFamilyTreeData = (personId, maxLevel = 2) => {
     const [loading, setLoading] = useState(true);
     const token = getAuthToken();
 
-    console.log("the token is :", token)
+    //console.log("the token is :", token)
 
     useEffect(() => {
 
@@ -96,11 +96,11 @@ const useFamilyTreeData = (personId, maxLevel = 2) => {
 
                 if (result?.data?.getPerson) {
                     const mapped = mapFamilyTreeResponse(result.data.getPerson);
-                    console.log("mapped is:", mapped);
+                   // console.log("mapped is:", mapped);
                     setTreeData(mapped);
                 }
             } catch (error) {
-                console.error("Failed to fetch family tree:", error);
+               // console.error("Failed to fetch family tree:", error);
             } finally {
                 setLoading(false);
             }

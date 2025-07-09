@@ -47,13 +47,13 @@ const PersonDialog = ({ personData, onClose }) => {
         if (!personData) return;
 
         const loadAncestry = async () => {
-            console.log("Fetching ancestry...");
+           // console.log("Fetching ancestry...");
             try {
                 const heads = await fetchAncestry();
-                console.log("Fetched heads:", heads);
+               // console.log("Fetched heads:", heads);
                 setBloodyHeads(heads);
             } catch (err) {
-                console.error("Failed to load ancestry heads", err);
+               // console.error("Failed to load ancestry heads", err);
             }
         };
 
@@ -70,10 +70,10 @@ const PersonDialog = ({ personData, onClose }) => {
             try {
                 const result = await fetchSpouses(+data.id);
                 setSpousesList(result?.data || []);
-                console.log("all spouses in useeffect  are :", result);
-                console.log("the spousesList  in useeffect  is  :", spousesList);
+               // console.log("all spouses in useeffect  are :", result);
+                //console.log("the spousesList  in useeffect  is  :", spousesList);
             } catch (err) {
-                console.error("Failed to fetch spouses for child", err);
+               // console.error("Failed to fetch spouses for child", err);
             }
         };
 
@@ -92,7 +92,7 @@ const PersonDialog = ({ personData, onClose }) => {
         try {
             if (relationship === "Spouse") {
                 {
-                    console.log("form in spouse:", form);
+                    //console.log("form in spouse:", form);
                 }
                 const input = {
                     person_id: data.id,
@@ -111,7 +111,7 @@ const PersonDialog = ({ personData, onClose }) => {
 
             } else if (relationship === "Parents") {
                 {
-                    console.log("form in parent:", form);
+                   // console.log("form in parent:", form);
                 }
                 if (!isHead) {
                     toast.error("You can only add parents to head nodes.");
@@ -142,7 +142,7 @@ const PersonDialog = ({ personData, onClose }) => {
             } else if (relationship === "Child") {
 
                 {
-                    console.log("form in child:", form);
+                   // console.log("form in child:", form);
                 }
                 const genderVal = form.gender === "Male" ? 1 : 0;
                 const selectedPersonGender = data.data.gender; // "M" or "F"
