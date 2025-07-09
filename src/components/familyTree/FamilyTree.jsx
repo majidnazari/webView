@@ -50,17 +50,13 @@ const FamilyTree = ({ chartId, onSelect }) => {
   });
 
   useEffect(() => {
-    const handleFlutterReady = () => {
-      console.log("✅ Flutter WebView platform ready");
-
-      // React side handler to receive data from Flutter
-      window.flutter_inappwebview?.addJavaScriptHandler?.({
-        handlerName: "fromFlutter",
+    const onReady = () => {
+      window.flutter_inappwebview.addJavaScriptHandler({
+        handlerName: 'fromFlutter',
         handler: (args) => {
-          const rawData = args[0]; // Flutter sends a JSON object as first argument
-          console.log("📥 Data received from Flutter:", rawData);
-
+          console.log("Received args from Flutter:", args);
           try {
+            const rawData = args[0];
             const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
 
             const newConfig = {
@@ -74,24 +70,20 @@ const FamilyTree = ({ chartId, onSelect }) => {
               mode: data.mode || "single",
             };
 
-            setConfig(newConfig); // Update your React component's state
-            return { status: "ok", received: newConfig }; // Optional: return data to Flutter
+            setConfig(newConfig);
+
+            return newConfig; // return config synchronously
           } catch (err) {
-            console.error("❌ Invalid config format from Flutter:", err);
-            return { status: "error", message: "Invalid JSON format" };
+            console.error("Error parsing from Flutter:", err);
+            return { error: "Invalid JSON" };
           }
         },
       });
     };
 
-    // Wait for Flutter platform to be ready before setting handler
-    window.addEventListener("flutterInAppWebViewPlatformReady", handleFlutterReady);
-
-    return () => {
-      window.removeEventListener("flutterInAppWebViewPlatformReady", handleFlutterReady);
-    };
+    window.addEventListener("flutterInAppWebViewPlatformReady", onReady);
+    return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
   }, []);
-
 
 
   // Sync config to settings
