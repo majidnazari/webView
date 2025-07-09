@@ -89,44 +89,49 @@ const FamilyTree = ({ chartId, onSelect }) => {
   useEffect(() => {
     const handleFlutterReady = () => {
       console.log("🚀 Flutter WebView is ready");
+      window.flutter_inappwebview
+        .callHandler('fromWeb', 'سلام از WebView!')
+        .then(function (response) {
+          console.log("📤 پاسخ از Flutter:", response);
+        });
 
       // Register handler for incoming config from Flutter
-      if (window.flutter_inappwebview?.callHandler) {
-        // ✅ Listen for Flutter calling 'fromWeb' with config object
-        window.flutter_inappwebview.addJavaScriptHandler?.({
-          handlerName: 'fromWeb',
-          handler: (args) => {
-            const rawData = args[0];
+      // if (window.flutter_inappwebview?.callHandler) {
+      //   // ✅ Listen for Flutter calling 'fromWeb' with config object
+      //   window.flutter_inappwebview.addJavaScriptHandler?.({
+      //     handlerName: 'fromWeb',
+      //     handler: (args) => {
+      //       const rawData = args[0];
 
-            console.log("📥 Received config from Flutter:", rawData);
+      //       console.log("📥 Received config from Flutter:", rawData);
 
-            // Fill the config if exists
-            try {
-              const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+      //       // Fill the config if exists
+      //       try {
+      //         const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
 
-              const newConfig = {
-                token: data.token,
-                personIdLeft: data.personIdLeft,
-                personIdRight: data.personIdRight || "",
-                freezeLeftTree: !!data.freezeLeftTree,
-                freezeRightTree: !!data.freezeRightTree,
-                maxLevelLeft: data.maxLevelLeft || 5,
-                maxLevelRight: data.maxLevelRight || 3,
-                mode: data.mode || "single",
-              };
+      //         const newConfig = {
+      //           token: data.token,
+      //           personIdLeft: data.personIdLeft,
+      //           personIdRight: data.personIdRight || "",
+      //           freezeLeftTree: !!data.freezeLeftTree,
+      //           freezeRightTree: !!data.freezeRightTree,
+      //           maxLevelLeft: data.maxLevelLeft || 5,
+      //           maxLevelRight: data.maxLevelRight || 3,
+      //           mode: data.mode || "single",
+      //         };
 
-              setConfig(newConfig);
+      //         setConfig(newConfig);
 
-              // ✅ Send config back to Flutter
-              return newConfig;
+      //         // ✅ Send config back to Flutter
+      //         return newConfig;
 
-            } catch (err) {
-              console.error("❌ Invalid config format from Flutter:", err);
-              return { error: "Invalid config format" };
-            }
-          },
-        });
-      }
+      //       } catch (err) {
+      //         console.error("❌ Invalid config format from Flutter:", err);
+      //         return { error: "Invalid config format" };
+      //       }
+      //     },
+      //   });
+      // }
     };
 
     window.addEventListener("flutterInAppWebViewPlatformReady", handleFlutterReady);
