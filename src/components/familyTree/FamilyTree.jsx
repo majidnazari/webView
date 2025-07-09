@@ -201,13 +201,18 @@ const FamilyTree = ({ chartId, onSelect }) => {
       const person = d.data?.data;
       if (!person || !person.id) return;
 
-      if (settings.freezeTree) return;
 
       window.FlutterBridge?.postMessage(JSON.stringify({
         type: "personSelected",
         personId: person.id,
         fullName: person.first_name + " " + person.last_name,
+        gender: person.gender,
+        img: person.avatar,
+        spouse_ids: null
       }));
+
+      if (settings.freezeTree) return;
+
 
       setSelectedPerson(d);
 
