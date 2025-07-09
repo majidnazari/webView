@@ -49,112 +49,49 @@ const FamilyTree = ({ chartId, onSelect }) => {
     cardDisplayLines: ["first_name", "birth_date,death_date"],
   });
 
-  // Receive settings from Flutter
-  // useEffect(() => {
-  //   const handleMessage = (event) => {
-  //     console.log("Received message from Flutter:", event.data);
-  //     window.FlutterBridge?.postMessage(JSON.stringify({
-  //       type: "log",
-  //       message: "Received message from Flutter: " + event.data
-  //     }));
-  //     try {
-  //       const data = JSON.parse(event.data);
-  //       if (data.token && data.personIdLeft) {
-  //         setConfig({
-  //           token: data.token,
-  //           personIdLeft: data.personIdLeft,
-  //           personIdRight: data.personIdRight || "",
-  //           freezeLeftTree: !!data.freezeLeftTree,
-  //           freezeRightTree: !!data.freezeRightTree,
-  //           maxLevelLeft: data.maxLevelLeft || 5,
-  //           maxLevelRight: data.maxLevelRight || 3,
-  //           mode: data.mode || "single",
-  //         });
-  //       }
-  //     } catch (err) {
-  //       console.warn("Invalid message from Flutter:", err);
-  //     }
-  //   };
-
-  //   window.addEventListener("flutterInAppWebViewPlatformReady", function () {
-  //     // ارسال دیتا به Flutter
-  //     window.flutter_inappwebview
-  //       .callHandler('fromWeb', 'سلام از WebView!')
-  //       .then(function (response) {
-  //         console.log("📤 پاسخ از Flutter:", response);
-  //       });
-  //   });
-  // }, []);
-
   useEffect(() => {
+    const handleFlutterReady = () => {
+      console.log("✅ Flutter WebView platform ready");
 
-    window.fromFlutter = (message) => {
-      console.log("📩 پیام از Flutter:", message);
-      // اینجا می‌تونی state آپدیت کنی یا هر کاری خواستی انجام بدی
-      alert("پیام از Flutter: " + message);
+      // React side handler to receive data from Flutter
+      window.flutter_inappwebview?.addJavaScriptHandler?.({
+        handlerName: "fromFlutter",
+        handler: (args) => {
+          const rawData = args[0]; // Flutter sends a JSON object as first argument
+          console.log("📥 Data received from Flutter:", rawData);
+
+          try {
+            const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+
+            const newConfig = {
+              token: data.token,
+              personIdLeft: data.personIdLeft,
+              personIdRight: data.personIdRight || "",
+              freezeLeftTree: !!data.freezeLeftTree,
+              freezeRightTree: !!data.freezeRightTree,
+              maxLevelLeft: data.maxLevelLeft || 5,
+              maxLevelRight: data.maxLevelRight || 3,
+              mode: data.mode || "single",
+            };
+
+            setConfig(newConfig); // Update your React component's state
+            return { status: "ok", received: newConfig }; // Optional: return data to Flutter
+          } catch (err) {
+            console.error("❌ Invalid config format from Flutter:", err);
+            return { status: "error", message: "Invalid JSON format" };
+          }
+        },
+      });
     };
 
+    // Wait for Flutter platform to be ready before setting handler
+    window.addEventListener("flutterInAppWebViewPlatformReady", handleFlutterReady);
 
-    window.flutter_inappwebview
-      .callHandler('fromReact', { name: 'Hassan', message: 'سلام از React!' })
-      .then(response => {
-        console.log("📥 پاسخ از Flutter:", response);
-      });
-      
-    // const handleFlutterReady = () => {
-    //   console.log(" Flutter WebView is ready");
-    //   // window.flutter_inappwebview
-    //   //   .callHandler('fromWeb', 'سلام از WebView!')
-    //   //   .then(function (response) {
-    //   //     console.log(" پاسخ از Flutter:", response);
-    //   //   });
-
-
-    //   // Register handler for incoming config from Flutter
-    //   if (window.flutter_inappwebview?.callHandler) {
-    //     // Listen for Flutter calling 'fromWeb' with config object
-    //     window.flutter_inappwebview.addJavaScriptHandler?.({
-    //       handlerName: 'fromWeb',
-    //       handler: (args) => {
-    //         const rawData = args[0];
-
-    //         console.log(" Received config from Flutter:", rawData);
-
-    //         // Fill the config if exists
-    //         try {
-    //           const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
-
-    //           const newConfig = {
-    //             token: data.token,
-    //             personIdLeft: data.personIdLeft,
-    //             personIdRight: data.personIdRight || "",
-    //             freezeLeftTree: !!data.freezeLeftTree,
-    //             freezeRightTree: !!data.freezeRightTree,
-    //             maxLevelLeft: data.maxLevelLeft || 5,
-    //             maxLevelRight: data.maxLevelRight || 3,
-    //             mode: "single",
-    //           };
-
-    //           setConfig(newConfig);
-
-    //           // Send config back to Flutter
-    //           return newConfig;
-
-    //         } catch (err) {
-    //           console.error("Invalid config format from Flutter:", err);
-    //           return { error: "Invalid config format" };
-    //         }
-    //       },
-    //     });
-    //   }
-    // };
-
-    // window.addEventListener("flutterInAppWebViewPlatformReady", handleFlutterReady);
-
-    // return () => {
-    //   window.removeEventListener("flutterInAppWebViewPlatformReady", handleFlutterReady);
-    // };
+    return () => {
+      window.removeEventListener("flutterInAppWebViewPlatformReady", handleFlutterReady);
+    };
   }, []);
+
 
 
   // Sync config to settings
