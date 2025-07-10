@@ -84,7 +84,7 @@ const FamilyTree = ({ chartId, onSelect }) => {
     window.addEventListener("flutterInAppWebViewPlatformReady", function () {
       console.log("hello from react");
     });
-    return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
+    //return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
   }, []);
 
 
@@ -259,12 +259,12 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
   return (
     <>
-      {/* Flutter-controlled app: comment out settings UI */}
-      {/* 
+
+
       <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
-      </div> 
-      */}
+      </div>
+
 
       <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
 
