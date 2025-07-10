@@ -81,9 +81,9 @@ const FamilyTree = ({ chartId, onSelect }) => {
     //   });
     // };
 
-    window.addEventListener("flutterInAppWebViewPlatformReady", function () {
-      console.log("hello from react");
-    });
+    // window.addEventListener("flutterInAppWebViewPlatformReady", function () {
+    //   console.log("hello from react");
+    // });
     //return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
   }, []);
 
@@ -215,7 +215,17 @@ const FamilyTree = ({ chartId, onSelect }) => {
       if (!person || !person.id) return;
 
 
-      window.FlutterBridge?.postMessage(JSON.stringify({
+      // window.FlutterBridge?.postMessage(JSON.stringify({
+      //   type: "personSelected",
+      //   personId: person.id,
+      //   fullName: person.first_name + " " + person.last_name,
+      //   gender: person.gender,
+      //   img: person.avatar,
+      //   spouse_ids: null
+      // }));
+
+
+      window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
         type: "personSelected",
         personId: person.id,
         fullName: person.first_name + " " + person.last_name,
@@ -223,6 +233,7 @@ const FamilyTree = ({ chartId, onSelect }) => {
         img: person.avatar,
         spouse_ids: null
       }));
+
 
       if (settings.freezeTree) return;
 
