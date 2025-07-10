@@ -87,6 +87,22 @@ const FamilyTree = ({ chartId, onSelect }) => {
   //return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
   //}, []);
 
+  useEffect(() => {
+    console.log("the add javascript method  is running");
+    // Register the handler only once when component mounts
+    window.flutter_inappwebview?.addJavaScriptHandler({
+      handlerName: "fromFlutter",
+      handler: (args) => {
+        console.log("📦 Message from Flutter via callHandler:", args[0]);
+
+        // You can update state or call logic here with args[0] (usually the config)
+        // e.g., setTreeConfig(args[0]);
+
+        return "Thanks, got it!";
+      },
+    });
+  }, []);
+
 
   useEffect(() => {
     const handleFlutterMessage = (event) => {
@@ -227,20 +243,9 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
     const handleCardClick = (e, d) => {
 
-
-      window.flutter_inappwebview.addJavaScriptHandler({
-        handlerName: "fromFlutter",
-        handler: (args) => {
-          console.log("📦 Message from Flutter via callHandler:", args[0]);
-          return "Thanks, got it!";
-        },
-      });
-
-
       if (!d || !d.data) return;
       const person = d.data?.data;
       if (!person || !person.id) return;
-
 
       // window.FlutterBridge?.postMessage(JSON.stringify({
       //   type: "personSelected",
