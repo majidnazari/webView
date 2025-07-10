@@ -49,43 +49,59 @@ const FamilyTree = ({ chartId, onSelect }) => {
     cardDisplayLines: ["first_name", "birth_date,death_date"],
   });
 
+  //useEffect(() => {
+  // const onReady = () => {
+  //   window.flutter_inappwebview.addJavaScriptHandler({
+  //     handlerName: 'fromFlutter',
+  //     handler: (args) => {
+  //       console.log("Received args from Flutter:", args);
+  //       try {
+  //         const rawData = args[0];
+  //         const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+
+  //         const newConfig = {
+  //           token: data.token,
+  //           personIdLeft: data.personIdLeft,
+  //           personIdRight: data.personIdRight || "",
+  //           freezeLeftTree: !!data.freezeLeftTree,
+  //           freezeRightTree: !!data.freezeRightTree,
+  //           maxLevelLeft: data.maxLevelLeft || 5,
+  //           maxLevelRight: data.maxLevelRight || 3,
+  //           mode: data.mode || "single",
+  //         };
+
+  //         setConfig(newConfig);
+
+  //         return newConfig; // return config synchronously
+  //       } catch (err) {
+  //         console.error("Error parsing from Flutter:", err);
+  //         return { error: "Invalid JSON" };
+  //       }
+  //     },
+  //   });
+  // };
+
+  // window.addEventListener("flutterInAppWebViewPlatformReady", function () {
+  //   console.log("hello from react");
+  // });
+  //return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
+  //}, []);
+
+
   useEffect(() => {
-    // const onReady = () => {
-    //   window.flutter_inappwebview.addJavaScriptHandler({
-    //     handlerName: 'fromFlutter',
-    //     handler: (args) => {
-    //       console.log("Received args from Flutter:", args);
-    //       try {
-    //         const rawData = args[0];
-    //         const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+    const handleFlutterMessage = (event) => {
+      console.log("📦 Received in React:", event.detail);
+      // Do something with event.detail
+    };
 
-    //         const newConfig = {
-    //           token: data.token,
-    //           personIdLeft: data.personIdLeft,
-    //           personIdRight: data.personIdRight || "",
-    //           freezeLeftTree: !!data.freezeLeftTree,
-    //           freezeRightTree: !!data.freezeRightTree,
-    //           maxLevelLeft: data.maxLevelLeft || 5,
-    //           maxLevelRight: data.maxLevelRight || 3,
-    //           mode: data.mode || "single",
-    //         };
+    window.addEventListener("FlutterReady", handleFlutterMessage);
 
-    //         setConfig(newConfig);
-
-    //         return newConfig; // return config synchronously
-    //       } catch (err) {
-    //         console.error("Error parsing from Flutter:", err);
-    //         return { error: "Invalid JSON" };
-    //       }
-    //     },
-    //   });
-    // };
-
-    // window.addEventListener("flutterInAppWebViewPlatformReady", function () {
-    //   console.log("hello from react");
-    // });
-    //return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
+    return () => {
+      window.removeEventListener("FlutterReady", handleFlutterMessage);
+    };
   }, []);
+
+
 
 
   // Sync config to settings
