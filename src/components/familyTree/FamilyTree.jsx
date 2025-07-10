@@ -226,6 +226,17 @@ const FamilyTree = ({ chartId, onSelect }) => {
     // };
 
     const handleCardClick = (e, d) => {
+
+
+      window.flutter_inappwebview.addJavaScriptHandler({
+        handlerName: "fromFlutter",
+        handler: (args) => {
+          console.log("📦 Message from Flutter via callHandler:", args[0]);
+          return "Thanks, got it!";
+        },
+      });
+
+
       if (!d || !d.data) return;
       const person = d.data?.data;
       if (!person || !person.id) return;
