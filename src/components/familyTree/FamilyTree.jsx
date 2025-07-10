@@ -89,18 +89,20 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
   useEffect(() => {
     console.log("the add javascript method  is running");
+
+    window.flutter_inappwebview.callHandler("FlutterBridge", "hi from react");
     // Register the handler only once when component mounts
-    window.flutter_inappwebview?.addJavaScriptHandler({
-      handlerName: "fromFlutter",
-      handler: (args) => {
-        console.log("📦 Message from Flutter via callHandler:", args[0]);
+    // window.flutter_inappwebview?.addJavaScriptHandler({
+    //   handlerName: "fromFlutter",
+    //   handler: (args) => {
+    //     console.log("📦 Message from Flutter via callHandler:", args[0]);
 
-        // You can update state or call logic here with args[0] (usually the config)
-        // e.g., setTreeConfig(args[0]);
+    //     // You can update state or call logic here with args[0] (usually the config)
+    //     // e.g., setTreeConfig(args[0]);
 
-        return "Thanks, got it!";
-      },
-    });
+    //     //return "Thanks, got it!";
+    //   },
+    // });
   }, []);
 
 
