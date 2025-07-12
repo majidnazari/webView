@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FamilyTree from "../src/components/familyTree/FamilyTree";
 import MergeFamilyTree from "../src/components/familyTree/MergeFamilyTree";
-import { setAuthToken } from "./utils/authToken";
+import { setAuthToken, getAuthToken } from "./utils/authToken";
 
 const App = () => {
   const [configFromFlutter, setConfigFromFlutter] = useState(null);
@@ -17,6 +17,8 @@ const App = () => {
         // Save token globally
         if (parsed.token) {
           setAuthToken(parsed.token);
+          console.log(" token from flutter is :", getAuthToken());
+
         }
 
         // Store parsed config
