@@ -60,7 +60,7 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
         : messageFromFlutter;
 
       if (data?.token) {
-        setAuthToken(data.token);
+        // setAuthToken(data.token);
 
         setConfig({
           token: data.token,
@@ -73,7 +73,8 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
           maxLevelRight: data.maxLevelRight || 3,
         });
 
-        console.log("✅ Config loaded from `messageFromFlutter`:", data);
+        console.log("✅ Config loaded from `messageFromFlutter`:", JSON.stringify(data, null, 2));
+        console.log("✅ Config loaded from of familytree :", config);
       } else {
         console.warn("⚠️ `messageFromFlutter` missing token or invalid format");
       }
