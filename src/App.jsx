@@ -62,16 +62,16 @@ const App = () => {
   return (
     <div style={containerStyle}>
       {/* Display token */}
-      <div style={messageStyle}>Current Auth Token: {tokenDisplay}</div>
+      {/* <div style={messageStyle}>Current Auth Token: {tokenDisplay}</div> */}
 
       {/* Display raw message if not JSON */}
       {messageFromFlutter && (
-        <div style={messageStyle}>
-          Raw Message from Flutter: {messageFromFlutter}
-        </div>
+        // <div style={messageStyle}>
+        //   Raw Message from Flutter: {messageFromFlutter}
+        // </div>
       )}
 
-      <h2>Family Tree Viewer</h2>
+      {/* <h2>Family Tree Viewer</h2> */}
 
       {/* Render tree(s) only when config is available */}
       {mode === "single" && configFromFlutter?.personIdLeft && (
