@@ -76,6 +76,7 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
             if (data?.token) {
               // Set global token
               setAuthToken(data.token);
+              console.log("config.token is :", getAuthToken());
 
               // Update config with data from Flutter
               setConfig({

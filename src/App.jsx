@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FamilyTree from "./components/familyTree/FamilyTree";
+import { setAuthToken } from "../../utils/authToken";
+
 
 const containerStyle = { padding: 20 };
 const modeSelectorStyle = { marginBottom: 10 };
@@ -35,6 +37,8 @@ const PersonForm = ({ personId, setPersonId, onSubmit, placeholder, buttonText }
 );
 
 const App = () => {
+  setAuthToken(data.token);
+  console.log("config.token is :", getAuthToken());
   const [mode, setMode] = useState("single");
 
   const [personId, setPersonId] = useState("");
