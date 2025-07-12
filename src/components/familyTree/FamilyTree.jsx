@@ -7,13 +7,12 @@ import SettingsDialog from "./settingDialog/SettingsDialog";
 
 import manTmp from "../../assets/images/1.jpg";
 import womanTmp from "../../assets/images/2.jpg";
-
 import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
+
 import { setAuthToken } from "../../utils/authToken";
 
 const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
-  { console.log("message flutter in family tree is :", messageFromFlutter) }
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
@@ -26,7 +25,7 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
     freezeRightTree: false,
     maxLevelLeft: 3,
     maxLevelRight: 3,
-    mode: "single", // or "merged"
+    mode: "single",
   });
 
   const [settings, setSettings] = useState({
@@ -51,63 +50,39 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
     cardDisplayLines: ["first_name", "birth_date,death_date"],
   });
 
-  // useEffect(() => {
-  //   const handleFlutterMessage = (event) => {
-  //     console.log("📦 Received in React:", event.detail);
-  //     // Do something with event.detail
-  //   };
-
-  //   window.addEventListener("FlutterReady", handleFlutterMessage);
-
-  //   return () => {
-  //     window.removeEventListener("FlutterReady", handleFlutterMessage);
-  //   };
-  // }, []);
-
-
+  // 🔄 Listen for `messageFromFlutter` changes and update config
   useEffect(() => {
-    if (typeof window !== "undefined" && window.flutter_inappwebview?.addJavaScriptHandler) {
-      window.flutter_inappwebview.addJavaScriptHandler({
-        handlerName: "fromFlutter",
-        handler: (args) => {
-          try {
-            const raw = args?.[0];
-            const data = typeof raw === "string" ? JSON.parse(raw) : raw;
+    if (!messageFromFlutter) return;
 
-            if (data?.token) {
-              // Set global token
-              setAuthToken(data.token);
-              console.log("config.token is :", getAuthToken());
+    try {
+      const data = typeof messageFromFlutter === "string"
+        ? JSON.parse(messageFromFlutter)
+        : messageFromFlutter;
 
-              // Update config with data from Flutter
-              setConfig({
-                token: data.token,
-                personIdLeft: data.personIdLeft || "1",
-                personIdRight: data.personIdRight || "",
-                mode: data.mode || "single",
-                freezeLeftTree: !!data.freezeLeftTree,
-                freezeRightTree: !!data.freezeRightTree,
-                maxLevelLeft: data.maxLevelLeft || 3,
-                maxLevelRight: data.maxLevelRight || 3,
-              });
+      if (data?.token) {
+        setAuthToken(data.token);
 
-              console.log("✅ Config loaded from Flutter:", data);
-              return "React received config and updated state.";
-            }
+        setConfig({
+          token: data.token,
+          personIdLeft: data.personIdLeft || "1",
+          personIdRight: data.personIdRight || "",
+          mode: data.mode || "single",
+          freezeLeftTree: !!data.freezeLeftTree,
+          freezeRightTree: !!data.freezeRightTree,
+          maxLevelLeft: data.maxLevelLeft || 3,
+          maxLevelRight: data.maxLevelRight || 3,
+        });
 
-            return "⚠️ No token or config found in message.";
-          } catch (err) {
-            console.error("❌ Error parsing JSON from Flutter:", err);
-            return "Error: Invalid message format.";
-          }
-        },
-      });
+        console.log("✅ Config loaded from `messageFromFlutter`:", data);
+      } else {
+        console.warn("⚠️ `messageFromFlutter` missing token or invalid format");
+      }
+    } catch (err) {
+      console.error("❌ Error parsing `messageFromFlutter`:", err);
     }
-  }, []);
+  }, [messageFromFlutter]);
 
-
-
-  // Sync config to settings
+  // 🔄 Sync config to settings
   useEffect(() => {
     const activePersonId =
       config.mode === "left" || config.mode === "single"
@@ -156,16 +131,11 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
       } else if (id === "4") {
         person.data.avatar = womanTmp;
       } else if (!avatar) {
-        if (gender === "M") {
-          person.data.avatar = avater_male;
-        } else if (gender === "F") {
-          person.data.avatar = avatar_female;
-        }
+        person.data.avatar = gender === "M" ? avater_male : avatar_female;
       }
 
       return person;
     });
-
 
     const container = containerRef.current;
     container.innerHTML = "";
@@ -210,52 +180,21 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
 
     let f3EditTree = null;
 
-    // const handleCardClick = (e, d) => {
-    //   if (!d || !d.data) return;
-    //   const person = d.data?.data;
-    //   if (!person || !person.id) return;
-
-    //   if (settings.freezeTree) return;
-
-    //   // Show ID and name on card click
-    //   onSelect?.({ id: person.id, name: person.first_name + " " + person.last_name });
-    //   setSelectedPerson(d);
-
-    //   if (settings.enableEditMode && f3EditTree && !f3EditTree.isAddingRelative()) {
-    //     f3EditTree.open(d);
-    //   }
-
-    //   f3Card.onCardClickDefault(e, d);
-    // };
-
     const handleCardClick = (e, d) => {
-
       if (!d || !d.data) return;
       const person = d.data?.data;
       if (!person || !person.id) return;
 
-      // window.FlutterBridge?.postMessage(JSON.stringify({
-      //   type: "personSelected",
-      //   personId: person.id,
-      //   fullName: person.first_name + " " + person.last_name,
-      //   gender: person.gender,
-      //   img: person.avatar,
-      //   spouse_ids: null
-      // }));
-
-
       window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
         type: "personSelected",
         personId: person.id,
-        fullName: person.first_name + " " + person.last_name,
+        fullName: `${person.first_name} ${person.last_name}`,
         gender: person.gender,
         img: person.avatar,
-        spouse_ids: null
+        spouse_ids: null,
       }));
 
-
       if (settings.freezeTree) return;
-
 
       setSelectedPerson(d);
 
@@ -265,7 +204,6 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
 
       f3Card.onCardClickDefault(e, d);
     };
-
 
     f3Card.setOnCardClick(handleCardClick);
 
@@ -289,32 +227,28 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
 
   return (
     <>
+      {/* Optional display of message from Flutter */}
       {/* {messageFromFlutter && (
-        <div
-          style={{
-            background: "#fff3cd",
-            color: "#856404",
-            padding: "10px 15px",
-            borderRadius: "5px",
-            marginBottom: 10,
-            marginLeft: 20,
-            marginRight: 20,
-            fontWeight: "bold",
-          }}
-        >
+        <div style={{
+          background: "#fff3cd",
+          color: "#856404",
+          padding: "10px 15px",
+          borderRadius: "5px",
+          marginBottom: 10,
+          marginLeft: 20,
+          marginRight: 20,
+          fontWeight: "bold",
+        }}>
           Message from Flutter: {messageFromFlutter}
         </div>
       )} */}
-
 
       <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
       </div>
 
-
       <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
 
-      {/* Settings dialog kept for potential future use */}
       <SettingsDialog
         open={showSettings}
         onClose={() => setShowSettings(false)}
