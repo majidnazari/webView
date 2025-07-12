@@ -10,6 +10,7 @@ import womanTmp from "../../assets/images/2.jpg";
 
 import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
+import { setAuthToken } from "../../utils/authToken";
 
 const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
   const containerRef = useRef(null);
@@ -49,19 +50,58 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
     cardDisplayLines: ["first_name", "birth_date,death_date"],
   });
 
+  // useEffect(() => {
+  //   const handleFlutterMessage = (event) => {
+  //     console.log("📦 Received in React:", event.detail);
+  //     // Do something with event.detail
+  //   };
+
+  //   window.addEventListener("FlutterReady", handleFlutterMessage);
+
+  //   return () => {
+  //     window.removeEventListener("FlutterReady", handleFlutterMessage);
+  //   };
+  // }, []);
+
+
   useEffect(() => {
-    const handleFlutterMessage = (event) => {
-      console.log("📦 Received in React:", event.detail);
-      // Do something with event.detail
-    };
+    if (typeof window !== "undefined" && window.flutter_inappwebview?.addJavaScriptHandler) {
+      window.flutter_inappwebview.addJavaScriptHandler({
+        handlerName: "fromFlutter",
+        handler: (args) => {
+          try {
+            const raw = args?.[0];
+            const data = typeof raw === "string" ? JSON.parse(raw) : raw;
 
-    window.addEventListener("FlutterReady", handleFlutterMessage);
+            if (data?.token) {
+              // Set global token
+              setAuthToken(data.token);
 
-    return () => {
-      window.removeEventListener("FlutterReady", handleFlutterMessage);
-    };
+              // Update config with data from Flutter
+              setConfig({
+                token: data.token,
+                personIdLeft: data.personIdLeft || "1",
+                personIdRight: data.personIdRight || "",
+                mode: data.mode || "single",
+                freezeLeftTree: !!data.freezeLeftTree,
+                freezeRightTree: !!data.freezeRightTree,
+                maxLevelLeft: data.maxLevelLeft || 3,
+                maxLevelRight: data.maxLevelRight || 3,
+              });
+
+              console.log("✅ Config loaded from Flutter:", data);
+              return "React received config and updated state.";
+            }
+
+            return "⚠️ No token or config found in message.";
+          } catch (err) {
+            console.error("❌ Error parsing JSON from Flutter:", err);
+            return "Error: Invalid message format.";
+          }
+        },
+      });
+    }
   }, []);
-
 
 
 
