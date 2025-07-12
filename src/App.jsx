@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FamilyTree from "./components/familyTree/FamilyTree";
-import { setAuthToken } from "../../utils/authToken";
-
+import { setAuthToken, getAuthToken } from "./utils/authToken";
 
 const containerStyle = { padding: 20 };
 const modeSelectorStyle = { marginBottom: 10 };
@@ -37,8 +36,6 @@ const PersonForm = ({ personId, setPersonId, onSubmit, placeholder, buttonText }
 );
 
 const App = () => {
-  setAuthToken(data.token);
-  console.log("config.token is :", getAuthToken());
   const [mode, setMode] = useState("single");
 
   const [personId, setPersonId] = useState("");
@@ -48,25 +45,42 @@ const App = () => {
   const [submittedId2, setSubmittedId2] = useState(null);
 
   const [freezeSingle, setFreezeSingle] = useState(false);
-
   const [messageFromFlutter, setMessageFromFlutter] = useState("");
+  const [configFromFlutter, setConfigFromFlutter] = useState(null);
 
-  // Setup global JS function to receive messages from Flutter
+  // Show current token
+  const [tokenDisplay, setTokenDisplay] = useState("");
+
   useEffect(() => {
     window.receiveMessageFromFlutter = (message) => {
       console.log("📨 Received from Flutter:", message);
-      setMessageFromFlutter(message);
 
-      // Respond back to Flutter via callHandler
-      if (window.flutter_inappwebview?.callHandler) {
-        window.flutter_inappwebview.callHandler(
-          "FlutterBridge",
-          `${message} and add react to returning back`
-        );
+      try {
+        const parsed = JSON.parse(message);
+
+        // Set token globally
+        if (parsed.token) {
+          setAuthToken(parsed.token);
+          setTokenDisplay(parsed.token);
+        }
+
+        // Save the whole config object
+        setConfigFromFlutter(parsed);
+
+        // Respond back to Flutter
+        if (window.flutter_inappwebview?.callHandler) {
+          window.flutter_inappwebview.callHandler(
+            "FlutterBridge",
+            `${message} and add react to returning back`
+          );
+        }
+
+      } catch (err) {
+        console.error("Invalid JSON from Flutter:", err);
+        setMessageFromFlutter(message);
       }
     };
 
-    // Cleanup on unmount
     return () => {
       delete window.receiveMessageFromFlutter;
     };
@@ -89,12 +103,17 @@ const App = () => {
 
   return (
     <div style={containerStyle}>
-      {/* Show message received from Flutter */}
+      {/* Flutter Message */}
       {messageFromFlutter && (
         <div style={messageStyle}>
-          Message from Flutter: {messageFromFlutter}
+          Raw Message from Flutter: {messageFromFlutter}
         </div>
       )}
+
+      {/* Token Display */}
+      <div style={messageStyle}>
+        Current Auth Token: {getAuthToken() || "No token set"}
+      </div>
 
       <h2>Family Tree Viewer</h2>
 
@@ -131,12 +150,14 @@ const App = () => {
             placeholder="Enter Person ID"
             buttonText="Show Tree"
           />
-          {submittedId && (
+          {(submittedId || configFromFlutter?.personIdLeft) && (
             <FamilyTree
               chartId="family-tree-1"
-              personId={submittedId}
-              freeze={freezeSingle}
+              personId={configFromFlutter?.personIdLeft || submittedId}
+              freeze={configFromFlutter?.freezeLeftTree ?? freezeSingle}
+              maxLevel={configFromFlutter?.maxLevelLeft}
               messageFromFlutter={messageFromFlutter}
+              mode={configFromFlutter?.mode}
             />
           )}
         </>
@@ -144,7 +165,7 @@ const App = () => {
 
       {mode === "merge" && (
         <div style={mergeContainerStyle}>
-          {/* Left tree */}
+          {/* Left Tree */}
           <div style={halfWidthStyle}>
             <PersonForm
               personId={personId}
@@ -153,18 +174,20 @@ const App = () => {
               placeholder="Enter Person ID (Left)"
               buttonText="Show Left Tree"
             />
-            {submittedId && (
+            {(submittedId || configFromFlutter?.personIdLeft) && (
               <FamilyTree
                 chartId="family-tree-left"
-                personId={submittedId}
-                freeze={true}
                 treeType="left"
+                personId={configFromFlutter?.personIdLeft || submittedId}
+                freeze={configFromFlutter?.freezeLeftTree ?? true}
+                maxLevel={configFromFlutter?.maxLevelLeft}
+                mode={configFromFlutter?.mode}
                 messageFromFlutter={messageFromFlutter}
               />
             )}
           </div>
 
-          {/* Right tree */}
+          {/* Right Tree */}
           <div style={halfWidthStyle}>
             <PersonForm
               personId={personId2}
@@ -173,12 +196,14 @@ const App = () => {
               placeholder="Enter Person ID (Right)"
               buttonText="Show Right Tree"
             />
-            {submittedId2 && (
+            {(submittedId2 || configFromFlutter?.personIdRight) && (
               <FamilyTree
                 chartId="family-tree-right"
-                personId={submittedId2}
-                freeze={true}
                 treeType="right"
+                personId={configFromFlutter?.personIdRight || submittedId2}
+                freeze={configFromFlutter?.freezeRightTree ?? true}
+                maxLevel={configFromFlutter?.maxLevelRight}
+                mode={configFromFlutter?.mode}
                 messageFromFlutter={messageFromFlutter}
               />
             )}
