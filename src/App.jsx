@@ -79,11 +79,13 @@ const App = () => {
       {mode === "single" && configFromFlutter?.personIdLeft && (
         <FamilyTree
           chartId="family-tree-1"
+          treeType="left"
+          messageFromFlutter={messageFromFlutter}
           personId={configFromFlutter.personIdLeft}
           freeze={configFromFlutter.freezeLeftTree ?? false}
           maxLevel={configFromFlutter.maxLevelLeft}
           mode="single"
-          messageFromFlutter={messageFromFlutter}
+
         />
       )}
 
@@ -95,11 +97,12 @@ const App = () => {
               <FamilyTree
                 chartId="family-tree-left"
                 treeType="left"
+                messageFromFlutter={messageFromFlutter}
                 personId={configFromFlutter.personIdLeft}
                 freeze={configFromFlutter.freezeLeftTree ?? true}
                 maxLevel={configFromFlutter.maxLevelLeft}
                 mode="merge"
-                messageFromFlutter={messageFromFlutter}
+
               />
             </div>
           )}
@@ -110,11 +113,11 @@ const App = () => {
               <FamilyTree
                 chartId="family-tree-right"
                 treeType="right"
+                messageFromFlutter={messageFromFlutter}
                 personId={configFromFlutter.personIdRight}
                 freeze={configFromFlutter.freezeRightTree ?? true}
                 maxLevel={configFromFlutter.maxLevelRight}
                 mode="merge"
-                messageFromFlutter={messageFromFlutter}
               />
             </div>
           )}
