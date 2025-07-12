@@ -10,8 +10,6 @@ import womanTmp from "../../assets/images/2.jpg";
 import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
 
-import { setAuthToken } from "../../utils/authToken";
-
 const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
@@ -50,7 +48,6 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
     cardDisplayLines: ["first_name", "birth_date,death_date"],
   });
 
-  // 🔄 Listen for `messageFromFlutter` changes and update config
   useEffect(() => {
     if (!messageFromFlutter) return;
 
@@ -60,8 +57,6 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
         : messageFromFlutter;
 
       if (data?.token) {
-        // setAuthToken(data.token);
-
         setConfig({
           token: data.token,
           personIdLeft: data.personIdLeft || "1",
@@ -74,7 +69,6 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
         });
 
         console.log("✅ Config loaded from `messageFromFlutter`:", JSON.stringify(data, null, 2));
-        console.log("✅ Config loaded from of familytree :", config);
       } else {
         console.warn("⚠️ `messageFromFlutter` missing token or invalid format");
       }
@@ -83,57 +77,60 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
     }
   }, [messageFromFlutter]);
 
-  // 🔄 Sync config to settings
   useEffect(() => {
-    const activePersonId =
-      config.mode === "left" || config.mode === "single"
-        ? config.personIdLeft
-        : config.personIdRight;
-
-    const activeMaxLevel =
-      config.mode === "left" || config.mode === "single"
-        ? config.maxLevelLeft
-        : config.maxLevelRight;
-
-    const activeFreeze =
-      config.mode === "left" || config.mode === "single"
-        ? config.freezeLeftTree
-        : config.freezeRightTree;
+    const isLeft = config.mode === "left" || config.mode === "single";
+    const personId = isLeft ? config.personIdLeft : config.personIdRight;
+    const maxLevel = isLeft ? config.maxLevelLeft : config.maxLevelRight;
+    const freezeTree = isLeft ? config.freezeLeftTree : config.freezeRightTree;
 
     setSettings((prev) => ({
       ...prev,
       token: config.token,
-      personId: activePersonId,
-      maxLevel: activeMaxLevel,
-      freezeTree: activeFreeze,
+      personId,
+      maxLevel,
+      freezeTree,
     }));
   }, [config]);
 
-  const { treeData, loading } = useFamilyTreeData(
-    settings.personId,
-    settings.maxLevel,
-    settings.token
+  const { treeData: leftTreeData, loading: loadingLeft } = useFamilyTreeData(
+    config.personIdLeft,
+    config.maxLevelLeft,
+    config.token
+  );
+
+  const { treeData: rightTreeData, loading: loadingRight } = useFamilyTreeData(
+    config.personIdRight,
+    config.maxLevelRight,
+    config.token
   );
 
   useEffect(() => {
-    if (settings.freezeTree) {
-      setSelectedPerson(null);
+    if (!containerRef.current) return;
+
+    const loading = config.mode === "merge" ? loadingLeft || loadingRight : loadingLeft;
+    if (loading) return;
+
+    let combinedData = [];
+    if (config.mode === "merge") {
+      const map = new Map();
+      [...leftTreeData, ...rightTreeData].forEach((item) => {
+        if (!map.has(item.data.id)) {
+          map.set(item.data.id, item);
+        }
+      });
+      combinedData = Array.from(map.values());
+    } else {
+      combinedData = leftTreeData;
     }
-  }, [settings.freezeTree]);
 
-  useEffect(() => {
-    if (loading || !containerRef.current || treeData.length === 0) return;
+    if (!combinedData.length) return;
 
-    const processedData = treeData.map((person) => {
+    const processedData = combinedData.map((person) => {
       const { id, gender, avatar } = person.data;
 
-      if (id === "1") {
-        person.data.avatar = manTmp;
-      } else if (id === "4") {
-        person.data.avatar = womanTmp;
-      } else if (!avatar) {
-        person.data.avatar = gender === "M" ? avater_male : avatar_female;
-      }
+      if (id === "1") person.data.avatar = manTmp;
+      else if (id === "4") person.data.avatar = womanTmp;
+      else if (!avatar) person.data.avatar = gender === "M" ? avater_male : avatar_female;
 
       return person;
     });
@@ -172,14 +169,10 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
     if (settings.imageHeight) dimOptions.img_height = +settings.imageHeight;
     if (settings.imageX) dimOptions.img_x = +settings.imageX;
     if (settings.imageY) dimOptions.img_y = +settings.imageY;
-    if (settings.textX) dimOptions.text_x = +settings.textX;
-    if (settings.textY) dimOptions.text_y = +settings.textY;
 
     if (Object.keys(dimOptions).length > 0) {
       f3Card.setCardDim(dimOptions);
     }
-
-    let f3EditTree = null;
 
     const handleCardClick = (e, d) => {
       if (!d || !d.data) return;
@@ -198,18 +191,13 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
       if (settings.freezeTree) return;
 
       setSelectedPerson(d);
-
-      if (settings.enableEditMode && f3EditTree && !f3EditTree.isAddingRelative()) {
-        f3EditTree.open(d);
-      }
-
       f3Card.onCardClickDefault(e, d);
     };
 
     f3Card.setOnCardClick(handleCardClick);
 
     if (settings.enableEditMode) {
-      f3EditTree = f3Chart
+      const f3EditTree = f3Chart
         .editTree()
         .fixed(true)
         .setFields([
@@ -224,26 +212,10 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
     }
 
     f3Chart.updateTree({ initial: true });
-  }, [treeData, loading, settings]);
+  }, [leftTreeData, rightTreeData, loadingLeft, loadingRight, settings]);
 
   return (
     <>
-      {/* Optional display of message from Flutter */}
-      {/* {messageFromFlutter && (
-        <div style={{
-          background: "#fff3cd",
-          color: "#856404",
-          padding: "10px 15px",
-          borderRadius: "5px",
-          marginBottom: 10,
-          marginLeft: 20,
-          marginRight: 20,
-          fontWeight: "bold",
-        }}>
-          Message from Flutter: {messageFromFlutter}
-        </div>
-      )} */}
-
       <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
       </div>
