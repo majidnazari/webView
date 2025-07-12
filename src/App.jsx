@@ -3,16 +3,6 @@ import FamilyTree from "./components/familyTree/FamilyTree";
 import { setAuthToken, getAuthToken } from "./utils/authToken";
 
 const containerStyle = { padding: 20 };
-const modeSelectorStyle = { marginBottom: 10 };
-const mergeContainerStyle = {
-  display: "flex",
-  flexDirection: "row",
-  gap: 30,
-  flexWrap: "nowrap",
-};
-const halfWidthStyle = { width: "50%" };
-const formStyle = { marginBottom: 10 };
-const buttonMarginLeft = { marginLeft: 10 };
 const messageStyle = {
   background: "#e0f7fa",
   padding: 10,
@@ -20,36 +10,17 @@ const messageStyle = {
   borderRadius: 4,
   fontWeight: "bold",
 };
-
-const PersonForm = ({ personId, setPersonId, onSubmit, placeholder, buttonText }) => (
-  <form onSubmit={onSubmit} style={formStyle}>
-    <input
-      type="text"
-      placeholder={placeholder}
-      value={personId}
-      onChange={(e) => setPersonId(e.target.value)}
-    />
-    <button type="submit" style={buttonMarginLeft}>
-      {buttonText}
-    </button>
-  </form>
-);
+const mergeContainerStyle = {
+  display: "flex",
+  flexDirection: "row",
+  gap: 30,
+  flexWrap: "nowrap",
+};
+const halfWidthStyle = { width: "50%" };
 
 const App = () => {
-  const [mode, setMode] = useState("single");
-
-  const [personId, setPersonId] = useState("");
-  const [submittedId, setSubmittedId] = useState(null);
-
-  const [personId2, setPersonId2] = useState("");
-  const [submittedId2, setSubmittedId2] = useState(null);
-
-  const [freezeSingle, setFreezeSingle] = useState(false);
-  const [messageFromFlutter, setMessageFromFlutter] = useState("");
   const [configFromFlutter, setConfigFromFlutter] = useState(null);
-
-  // Show current token
-  const [tokenDisplay, setTokenDisplay] = useState("");
+  const [messageFromFlutter, setMessageFromFlutter] = useState("");
 
   useEffect(() => {
     window.receiveMessageFromFlutter = (message) => {
@@ -58,23 +29,21 @@ const App = () => {
       try {
         const parsed = JSON.parse(message);
 
-        // Set token globally
+        // Save token
         if (parsed.token) {
           setAuthToken(parsed.token);
-          setTokenDisplay(parsed.token);
         }
 
-        // Save the whole config object
+        // Save config
         setConfigFromFlutter(parsed);
 
-        // Respond back to Flutter
+        // Respond to Flutter
         if (window.flutter_inappwebview?.callHandler) {
           window.flutter_inappwebview.callHandler(
             "FlutterBridge",
             `${message} and add react to returning back`
           );
         }
-
       } catch (err) {
         console.error("Invalid JSON from Flutter:", err);
         setMessageFromFlutter(message);
@@ -86,128 +55,67 @@ const App = () => {
     };
   }, []);
 
-  const handleSubmitSingle = (e) => {
-    e.preventDefault();
-    if (personId.trim()) setSubmittedId(personId.trim());
-  };
+  const tokenDisplay = getAuthToken() || "No token set";
 
-  const handleSubmitLeft = (e) => {
-    e.preventDefault();
-    if (personId.trim()) setSubmittedId(personId.trim());
-  };
-
-  const handleSubmitRight = (e) => {
-    e.preventDefault();
-    if (personId2.trim()) setSubmittedId2(personId2.trim());
-  };
+  const mode = configFromFlutter?.mode;
 
   return (
     <div style={containerStyle}>
-      {/* Flutter Message */}
+      {/* Display token */}
+      <div style={messageStyle}>Current Auth Token: {tokenDisplay}</div>
+
+      {/* Display raw message if not JSON */}
       {messageFromFlutter && (
         <div style={messageStyle}>
           Raw Message from Flutter: {messageFromFlutter}
         </div>
       )}
 
-      {/* Token Display */}
-      <div style={messageStyle}>
-        Current Auth Token: {getAuthToken() || "No token set"}
-      </div>
-
       <h2>Family Tree Viewer</h2>
 
-      {/* Mode selector */}
-      <div style={modeSelectorStyle}>
-        <label>
-          <input
-            type="radio"
-            name="mode"
-            value="single"
-            checked={mode === "single"}
-            onChange={() => setMode("single")}
-          />{" "}
-          Single Tree
-        </label>{" "}
-        <label>
-          <input
-            type="radio"
-            name="mode"
-            value="merge"
-            checked={mode === "merge"}
-            onChange={() => setMode("merge")}
-          />{" "}
-          Merge Trees
-        </label>
-      </div>
-
-      {mode === "single" && (
-        <>
-          <PersonForm
-            personId={personId}
-            setPersonId={setPersonId}
-            onSubmit={handleSubmitSingle}
-            placeholder="Enter Person ID"
-            buttonText="Show Tree"
-          />
-          {(submittedId || configFromFlutter?.personIdLeft) && (
-            <FamilyTree
-              chartId="family-tree-1"
-              personId={configFromFlutter?.personIdLeft || submittedId}
-              freeze={configFromFlutter?.freezeLeftTree ?? freezeSingle}
-              maxLevel={configFromFlutter?.maxLevelLeft}
-              messageFromFlutter={messageFromFlutter}
-              mode={configFromFlutter?.mode}
-            />
-          )}
-        </>
+      {/* Render tree(s) only when config is available */}
+      {mode === "single" && configFromFlutter?.personIdLeft && (
+        <FamilyTree
+          chartId="family-tree-1"
+          personId={configFromFlutter.personIdLeft}
+          freeze={configFromFlutter.freezeLeftTree ?? false}
+          maxLevel={configFromFlutter.maxLevelLeft}
+          mode="single"
+          messageFromFlutter={messageFromFlutter}
+        />
       )}
 
       {mode === "merge" && (
         <div style={mergeContainerStyle}>
           {/* Left Tree */}
-          <div style={halfWidthStyle}>
-            <PersonForm
-              personId={personId}
-              setPersonId={setPersonId}
-              onSubmit={handleSubmitLeft}
-              placeholder="Enter Person ID (Left)"
-              buttonText="Show Left Tree"
-            />
-            {(submittedId || configFromFlutter?.personIdLeft) && (
+          {configFromFlutter?.personIdLeft && (
+            <div style={halfWidthStyle}>
               <FamilyTree
                 chartId="family-tree-left"
                 treeType="left"
-                personId={configFromFlutter?.personIdLeft || submittedId}
-                freeze={configFromFlutter?.freezeLeftTree ?? true}
-                maxLevel={configFromFlutter?.maxLevelLeft}
-                mode={configFromFlutter?.mode}
+                personId={configFromFlutter.personIdLeft}
+                freeze={configFromFlutter.freezeLeftTree ?? true}
+                maxLevel={configFromFlutter.maxLevelLeft}
+                mode="merge"
                 messageFromFlutter={messageFromFlutter}
               />
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Right Tree */}
-          <div style={halfWidthStyle}>
-            <PersonForm
-              personId={personId2}
-              setPersonId={setPersonId2}
-              onSubmit={handleSubmitRight}
-              placeholder="Enter Person ID (Right)"
-              buttonText="Show Right Tree"
-            />
-            {(submittedId2 || configFromFlutter?.personIdRight) && (
+          {configFromFlutter?.personIdRight && (
+            <div style={halfWidthStyle}>
               <FamilyTree
                 chartId="family-tree-right"
                 treeType="right"
-                personId={configFromFlutter?.personIdRight || submittedId2}
-                freeze={configFromFlutter?.freezeRightTree ?? true}
-                maxLevel={configFromFlutter?.maxLevelRight}
-                mode={configFromFlutter?.mode}
+                personId={configFromFlutter.personIdRight}
+                freeze={configFromFlutter.freezeRightTree ?? true}
+                maxLevel={configFromFlutter.maxLevelRight}
+                mode="merge"
                 messageFromFlutter={messageFromFlutter}
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>
