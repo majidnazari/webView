@@ -289,7 +289,7 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
 
   return (
     <>
-      {messageFromFlutter && (
+      {/* {messageFromFlutter && (
         <div
           style={{
             background: "#fff3cd",
@@ -304,7 +304,7 @@ const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
         >
           Message from Flutter: {messageFromFlutter}
         </div>
-      )}
+      )} */}
 
 
       <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
