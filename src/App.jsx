@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FamilyTree from "./components/familyTree/FamilyTree";
 
 const containerStyle = { padding: 20 };
@@ -12,6 +12,13 @@ const mergeContainerStyle = {
 const halfWidthStyle = { width: "50%" };
 const formStyle = { marginBottom: 10 };
 const buttonMarginLeft = { marginLeft: 10 };
+const messageStyle = {
+  background: "#e0f7fa",
+  padding: 10,
+  marginBottom: 20,
+  borderRadius: 4,
+  fontWeight: "bold",
+};
 
 const PersonForm = ({ personId, setPersonId, onSubmit, placeholder, buttonText }) => (
   <form onSubmit={onSubmit} style={formStyle}>
@@ -38,6 +45,29 @@ const App = () => {
 
   const [freezeSingle, setFreezeSingle] = useState(false);
 
+  const [messageFromFlutter, setMessageFromFlutter] = useState("");
+
+  // Setup global JS function to receive messages from Flutter
+  useEffect(() => {
+    window.receiveMessageFromFlutter = (message) => {
+      console.log("📨 Received from Flutter:", message);
+      setMessageFromFlutter(message);
+
+      // Respond back to Flutter via callHandler
+      if (window.flutter_inappwebview?.callHandler) {
+        window.flutter_inappwebview.callHandler(
+          "FlutterBridge",
+          `${message} and add react to returning back`
+        );
+      }
+    };
+
+    // Cleanup on unmount
+    return () => {
+      delete window.receiveMessageFromFlutter;
+    };
+  }, []);
+
   const handleSubmitSingle = (e) => {
     e.preventDefault();
     if (personId.trim()) setSubmittedId(personId.trim());
@@ -55,6 +85,13 @@ const App = () => {
 
   return (
     <div style={containerStyle}>
+      {/* Show message received from Flutter */}
+      {messageFromFlutter && (
+        <div style={messageStyle}>
+          Message from Flutter: {messageFromFlutter}
+        </div>
+      )}
+
       <h2>Family Tree Viewer</h2>
 
       {/* Mode selector */}
