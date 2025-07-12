@@ -132,6 +132,7 @@ const App = () => {
               chartId="family-tree-1"
               personId={submittedId}
               freeze={freezeSingle}
+              messageFromFlutter={messageFromFlutter}
             />
           )}
         </>
@@ -154,6 +155,7 @@ const App = () => {
                 personId={submittedId}
                 freeze={true}
                 treeType="left"
+                messageFromFlutter={messageFromFlutter}
               />
             )}
           </div>
@@ -173,6 +175,7 @@ const App = () => {
                 personId={submittedId2}
                 freeze={true}
                 treeType="right"
+                messageFromFlutter={messageFromFlutter}
               />
             )}
           </div>

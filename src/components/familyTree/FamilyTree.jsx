@@ -11,7 +11,7 @@ import womanTmp from "../../assets/images/2.jpg";
 import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
 
-const FamilyTree = ({ chartId, onSelect }) => {
+const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
@@ -48,61 +48,6 @@ const FamilyTree = ({ chartId, onSelect }) => {
     imageY: "",
     cardDisplayLines: ["first_name", "birth_date,death_date"],
   });
-
-  //useEffect(() => {
-  // const onReady = () => {
-  //   window.flutter_inappwebview.addJavaScriptHandler({
-  //     handlerName: 'fromFlutter',
-  //     handler: (args) => {
-  //       console.log("Received args from Flutter:", args);
-  //       try {
-  //         const rawData = args[0];
-  //         const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
-
-  //         const newConfig = {
-  //           token: data.token,
-  //           personIdLeft: data.personIdLeft,
-  //           personIdRight: data.personIdRight || "",
-  //           freezeLeftTree: !!data.freezeLeftTree,
-  //           freezeRightTree: !!data.freezeRightTree,
-  //           maxLevelLeft: data.maxLevelLeft || 5,
-  //           maxLevelRight: data.maxLevelRight || 3,
-  //           mode: data.mode || "single",
-  //         };
-
-  //         setConfig(newConfig);
-
-  //         return newConfig; // return config synchronously
-  //       } catch (err) {
-  //         console.error("Error parsing from Flutter:", err);
-  //         return { error: "Invalid JSON" };
-  //       }
-  //     },
-  //   });
-  // };
-
-  // window.addEventListener("flutterInAppWebViewPlatformReady", function () {
-  //   console.log("hello from react");
-  // });
-  //return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
-  //}, []);
-
-  useEffect(() => {
-    // Only add the handler if running inside Flutter WebView
-    if (typeof window !== "undefined" && window.flutter_inappwebview?.addJavaScriptHandler) {
-      window.flutter_inappwebview.addJavaScriptHandler({
-        handlerName: "fromFlutter",
-        handler: (args) => {
-          console.log("📦 Message from Flutter via callHandler:", args?.[0]);
-          return "Thanks, got it!";
-        },
-      });
-    } else {
-      console.warn("⚠️ flutter_inappwebview is not available.");
-    }
-  }, []);
-
-
 
   useEffect(() => {
     const handleFlutterMessage = (event) => {
@@ -302,6 +247,22 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
   return (
     <>
+      {messageFromFlutter && (
+        <div
+          style={{
+            background: "#fff3cd",
+            color: "#856404",
+            padding: "10px 15px",
+            borderRadius: "5px",
+            marginBottom: 10,
+            marginLeft: 20,
+            marginRight: 20,
+            fontWeight: "bold",
+          }}
+        >
+          Message from Flutter: {messageFromFlutter}
+        </div>
+      )}
 
 
       <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
