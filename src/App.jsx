@@ -3,6 +3,13 @@ import FamilyTree from "./components/familyTree/FamilyTree";
 import { setAuthToken, getAuthToken } from "./utils/authToken";
 
 const containerStyle = { padding: 20 };
+const messageStyle = {
+  background: "#e0f7fa",
+  padding: 10,
+  marginBottom: 20,
+  borderRadius: 4,
+  fontWeight: "bold",
+};
 const mergeContainerStyle = {
   display: "flex",
   flexDirection: "row",
@@ -22,13 +29,15 @@ const App = () => {
       try {
         const parsed = JSON.parse(message);
 
+        // Save token
         if (parsed.token) {
           setAuthToken(parsed.token);
         }
 
+        // Save config
         setConfigFromFlutter(parsed);
 
-        // Send a reply back to Flutter
+        // Respond to Flutter
         if (window.flutter_inappwebview?.callHandler) {
           window.flutter_inappwebview.callHandler(
             "FlutterBridge",
@@ -46,35 +55,69 @@ const App = () => {
     };
   }, []);
 
+  const tokenDisplay = getAuthToken() || "No token set";
+
   const mode = configFromFlutter?.mode;
 
   return (
     <div style={containerStyle}>
-      {mode === "single" && (
+      {/* Display token */}
+      {/* <div style={messageStyle}>Current Auth Token: {tokenDisplay}</div> */}
+
+      {/* Display raw message if not JSON */}
+      {
+        //messageFromFlutter && (
+        // <div style={messageStyle}>
+        //   Raw Message from Flutter: {messageFromFlutter}
+        // </div>
+        // )
+      }
+
+      {/* <h2>Family Tree Viewer</h2> */}
+
+      {/* Render tree(s) only when config is available */}
+      {mode === "single" && configFromFlutter?.personIdLeft && (
         <FamilyTree
-          chartId="family-tree-left"
-          treeType="left"
+          chartId="family-tree-1"
+          personId={configFromFlutter.personIdLeft}
+          freeze={configFromFlutter.freezeLeftTree ?? false}
+          maxLevel={configFromFlutter.maxLevelLeft}
+          mode="single"
           messageFromFlutter={messageFromFlutter}
         />
       )}
 
       {mode === "merge" && (
         <div style={mergeContainerStyle}>
-          <div style={halfWidthStyle}>
-            <FamilyTree
-              chartId="family-tree-left"
-              treeType="left"
-              messageFromFlutter={messageFromFlutter}
-            />
-          </div>
+          {/* Left Tree */}
+          {configFromFlutter?.personIdLeft && (
+            <div style={halfWidthStyle}>
+              <FamilyTree
+                chartId="family-tree-left"
+                treeType="left"
+                personId={configFromFlutter.personIdLeft}
+                freeze={configFromFlutter.freezeLeftTree ?? true}
+                maxLevel={configFromFlutter.maxLevelLeft}
+                mode="merge"
+                messageFromFlutter={messageFromFlutter}
+              />
+            </div>
+          )}
 
-          <div style={halfWidthStyle}>
-            <FamilyTree
-              chartId="family-tree-right"
-              treeType="right"
-              messageFromFlutter={messageFromFlutter}
-            />
-          </div>
+          {/* Right Tree */}
+          {configFromFlutter?.personIdRight && (
+            <div style={halfWidthStyle}>
+              <FamilyTree
+                chartId="family-tree-right"
+                treeType="right"
+                personId={configFromFlutter.personIdRight}
+                freeze={configFromFlutter.freezeRightTree ?? true}
+                maxLevel={configFromFlutter.maxLevelRight}
+                mode="merge"
+                messageFromFlutter={messageFromFlutter}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>
