@@ -13,6 +13,7 @@ import avatar_female from "../../assets/images/avatar_female.jpg";
 import { setAuthToken } from "../../utils/authToken";
 
 const FamilyTree = ({ chartId, onSelect, messageFromFlutter }) => {
+  { console.log("message flutter in family tree is :", messageFromFlutter) }
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);

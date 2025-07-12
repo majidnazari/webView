@@ -43,6 +43,8 @@ const App = () => {
             "FlutterBridge",
             `${message} and add react to returning back`
           );
+          setMessageFromFlutter(message);
+
         }
       } catch (err) {
         console.error("Invalid JSON from Flutter:", err);
