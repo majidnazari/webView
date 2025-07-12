@@ -65,11 +65,13 @@ const App = () => {
       {/* <div style={messageStyle}>Current Auth Token: {tokenDisplay}</div> */}
 
       {/* Display raw message if not JSON */}
-      {messageFromFlutter && (
+      {
+        //messageFromFlutter && (
         // <div style={messageStyle}>
         //   Raw Message from Flutter: {messageFromFlutter}
         // </div>
-      )}
+        // )
+      }
 
       {/* <h2>Family Tree Viewer</h2> */}
 
