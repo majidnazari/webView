@@ -11,7 +11,7 @@ import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
 
 const FamilyTree = ({ chartId, personId, freeze, maxLevel }) => {
-  { console.log("the params in familytree are:", chartId, personId, freeze, maxLevel); }
+
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
