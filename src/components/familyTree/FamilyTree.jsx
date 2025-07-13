@@ -10,11 +10,12 @@ import womanTmp from "../../assets/images/2.jpg";
 import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
 
-const FamilyTree = ({ chartId, personId, freeze, maxLevel }) => {
+const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
 
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [selectionOrder, setSelectionOrder] = useState([]); // list of selected person IDs
 
   const [settings, setSettings] = useState({
     orientation: "vertical",
@@ -123,14 +124,34 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel }) => {
       const person = d.data?.data;
       if (!person || !person.id) return;
 
-      window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
-        type: "personSelected",
-        personId: person.id,
-        fullName: `${person.first_name} ${person.last_name}`,
-        gender: person.gender,
-        img: person.avatar,
-        spouse_ids: null,
-      }));
+      // window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
+      //   type: "personSelected",
+      //   personId: person.id,
+      //   fullName: `${person.first_name} ${person.last_name}`,
+      //   gender: person.gender,
+      //   img: person.avatar,
+      //   spouse_ids: null,
+      // }));
+
+      const maleColor = "rgb(173, 216, 230)";  // #add8e6
+      const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
+
+      if (mode === "merge") {
+        const cardInner = e.currentTarget.querySelector(".card-inner.card-image-rect");
+
+        if (cardInner && person.gender) {
+          const genderColor = person.gender === "M" ? maleColor : femaleColor;
+          const currentBg = window.getComputedStyle(cardInner).backgroundColor;
+
+          if (currentBg === "rgb(255, 255, 255)") {
+            // currently white => select it: set gender color
+            cardInner.style.backgroundColor = genderColor;
+          } else {
+            // currently colored => unselect it: reset to white
+            cardInner.style.backgroundColor = "#fff";
+          }
+        }
+      }
 
       if (settings.freezeTree) return;
 
@@ -143,6 +164,8 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel }) => {
       ) {
         f3EditTree.open(d);
       }
+
+
 
       f3Card.onCardClickDefault(e, d);
     };

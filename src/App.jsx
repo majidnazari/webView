@@ -102,9 +102,9 @@ const App = () => {
       <button onClick={() => {
         const testMergeConfig = JSON.stringify({
           token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNjJhNDU0M2YwNTk0NjUwMWE0NzhlMjBlNmM1ODI1NjhlZTI2ZjllNWJkMjBlNzY0NWRmY2JkNWRkNDJjMTU1MDBhYzU5ZDgzMDVmZDg5MmIiLCJpYXQiOjE3NTIzODg1MzguMzMyODAxLCJuYmYiOjE3NTIzODg1MzguMzMyODAyLCJleHAiOjE3NTI2NDc3MzguMzE2MDgsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.YfIuvTJPrnW3FSsQipHpXpqp_uVvDtJs-gNsZqnic169MDW8v9T0_GaybxBx-mrIK7VowEMOLPgNo9Z1KGaOo7W5jDwXbI6RisNPgwZmDhxy4SBDAcCEvYMrvGwQRls9YoCF4fFE-zNSHrtPdjowie99yjjwI5BTaG9uwRLBQJtOj2R-qg91LU0wQcFPsk24Loo5imUUMIBlBPTOsvPQ_3-68NKlMyvIB6gbfySVK38SHRVgrwiLe-yeC2_Rj3BS3Zg7OryfeWGD6HFpZvx1xN1-qtni0axtN8kT8xUkK2Qh6BGGk6ukTc4RuCTZIJj8IFtDbqUNkOvS6EQ2t0IfMopMh7cdUyLEo0dffMkQR7v28Wo8FNeKk0xnnkIWsfDtas8wnGvwfAK9xdkcCdvN3HqNkjh5dnDFP7Q9T6nXuUhkMmZ74XyTjp4fRhiWhiEWE9nfDv8PWzBDr1edI87GKMPKzTlNQm2cCPROjea7M1CltENsSgulwwRNODiwQDhKg7AE5sLSq9CZifX2M-kotjMi1oXz0BaHvPvtCG4A7wsg2MdNxwVDrdSUY8k9E7r_aSOqiJZVH-EJV182bgi841jLYka2ctPSVr8iOh5k6ILLCMIoCwxv-hgGJClAqRYiVBmWmULR7ceJ07dVD5Qw4W4IN1r9Jz1G01kFiSOZgkY",
-          mode: "single",
-          personIdLeft: "103",
-          personIdRight: "103",
+          mode: "merge",
+          personIdLeft: "1",
+          personIdRight: "1",
           freezeLeftTree: true,
           freezeRightTree: true,
           maxLevelLeft: 4,
@@ -157,7 +157,7 @@ const App = () => {
               personId={submittedId}
               freeze={freezeSingle}
               maxLevel={maxLevelLeft}
-              treeType="single"
+              mode="single"
             />
           )}
         </>
@@ -179,7 +179,7 @@ const App = () => {
                 personId={submittedId}
                 freeze={freezeLeftTree}
                 maxLevel={maxLevelLeft}
-                treeType="left"
+                mode="merge"
               />
             )}
           </div>
@@ -198,7 +198,7 @@ const App = () => {
                 personId={submittedId2}
                 freeze={freezeRightTree}
                 maxLevel={maxLevelRight}
-                treeType="right"
+                mode="merge"
               />
             )}
           </div>
