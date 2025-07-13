@@ -176,9 +176,9 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel }) => {
 
   return (
     <>
-      <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
+      {/* <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
-      </div>
+      </div> */}
 
       <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
 
