@@ -7,25 +7,14 @@ import SettingsDialog from "./settingDialog/SettingsDialog";
 
 import manTmp from "../../assets/images/1.jpg";
 import womanTmp from "../../assets/images/2.jpg";
-
 import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
 
-const FamilyTree = ({ chartId, onSelect }) => {
+const FamilyTree = ({ chartId, personId, freeze, maxLevel }) => {
+  { console.log("the params in familytree are:", chartId, personId, freeze, maxLevel); }
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-
-  const [config, setConfig] = useState({
-    token: "",
-    personIdLeft: "1",
-    personIdRight: "",
-    freezeLeftTree: false,
-    freezeRightTree: false,
-    maxLevelLeft: 3,
-    maxLevelRight: 3,
-    mode: "single", // or "merged"
-  });
 
   const [settings, setSettings] = useState({
     orientation: "vertical",
@@ -36,9 +25,9 @@ const FamilyTree = ({ chartId, onSelect }) => {
     singleParentEmptyCard: true,
     emptyCardLabel: "ADD",
     enableEditMode: false,
-    freezeTree: false,
-    personId: "1",
-    maxLevel: 3,
+    freezeTree: freeze || false,
+    personId: personId || "1",
+    maxLevel: maxLevel || 3,
     cardStyle: "imageRectangular",
     cardWidth: 90,
     cardHeight: 130,
@@ -50,74 +39,17 @@ const FamilyTree = ({ chartId, onSelect }) => {
   });
 
   useEffect(() => {
-    // const onReady = () => {
-    //   window.flutter_inappwebview.addJavaScriptHandler({
-    //     handlerName: 'fromFlutter',
-    //     handler: (args) => {
-    //       console.log("Received args from Flutter:", args);
-    //       try {
-    //         const rawData = args[0];
-    //         const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
-
-    //         const newConfig = {
-    //           token: data.token,
-    //           personIdLeft: data.personIdLeft,
-    //           personIdRight: data.personIdRight || "",
-    //           freezeLeftTree: !!data.freezeLeftTree,
-    //           freezeRightTree: !!data.freezeRightTree,
-    //           maxLevelLeft: data.maxLevelLeft || 5,
-    //           maxLevelRight: data.maxLevelRight || 3,
-    //           mode: data.mode || "single",
-    //         };
-
-    //         setConfig(newConfig);
-
-    //         return newConfig; // return config synchronously
-    //       } catch (err) {
-    //         console.error("Error parsing from Flutter:", err);
-    //         return { error: "Invalid JSON" };
-    //       }
-    //     },
-    //   });
-    // };
-
-    window.addEventListener("flutterInAppWebViewPlatformReady", function () {
-      console.log("hello from react");
-    });
-    //return () => window.removeEventListener("flutterInAppWebViewPlatformReady", onReady);
-  }, []);
-
-
-  // Sync config to settings
-  useEffect(() => {
-    const activePersonId =
-      config.mode === "left" || config.mode === "single"
-        ? config.personIdLeft
-        : config.personIdRight;
-
-    const activeMaxLevel =
-      config.mode === "left" || config.mode === "single"
-        ? config.maxLevelLeft
-        : config.maxLevelRight;
-
-    const activeFreeze =
-      config.mode === "left" || config.mode === "single"
-        ? config.freezeLeftTree
-        : config.freezeRightTree;
-
     setSettings((prev) => ({
       ...prev,
-      token: config.token,
-      personId: activePersonId,
-      maxLevel: activeMaxLevel,
-      freezeTree: activeFreeze,
+      freezeTree: freeze,
+      personId: personId,
+      maxLevel: maxLevel,
     }));
-  }, [config]);
+  }, [freeze, personId, maxLevel]);
 
   const { treeData, loading } = useFamilyTreeData(
     settings.personId,
-    settings.maxLevel,
-    settings.token
+    settings.maxLevel
   );
 
   useEffect(() => {
@@ -137,16 +69,11 @@ const FamilyTree = ({ chartId, onSelect }) => {
       } else if (id === "4") {
         person.data.avatar = womanTmp;
       } else if (!avatar) {
-        if (gender === "M") {
-          person.data.avatar = avater_male;
-        } else if (gender === "F") {
-          person.data.avatar = avatar_female;
-        }
+        person.data.avatar = gender === "M" ? avater_male : avatar_female;
       }
 
       return person;
     });
-
 
     const container = containerRef.current;
     container.innerHTML = "";
@@ -191,51 +118,34 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
     let f3EditTree = null;
 
-    // const handleCardClick = (e, d) => {
-    //   if (!d || !d.data) return;
-    //   const person = d.data?.data;
-    //   if (!person || !person.id) return;
-
-    //   if (settings.freezeTree) return;
-
-    //   // Show ID and name on card click
-    //   onSelect?.({ id: person.id, name: person.first_name + " " + person.last_name });
-    //   setSelectedPerson(d);
-
-    //   if (settings.enableEditMode && f3EditTree && !f3EditTree.isAddingRelative()) {
-    //     f3EditTree.open(d);
-    //   }
-
-    //   f3Card.onCardClickDefault(e, d);
-    // };
-
     const handleCardClick = (e, d) => {
       if (!d || !d.data) return;
       const person = d.data?.data;
       if (!person || !person.id) return;
 
-
-      window.FlutterBridge?.postMessage(JSON.stringify({
+      window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
         type: "personSelected",
         personId: person.id,
-        fullName: person.first_name + " " + person.last_name,
+        fullName: `${person.first_name} ${person.last_name}`,
         gender: person.gender,
         img: person.avatar,
-        spouse_ids: null
+        spouse_ids: null,
       }));
 
       if (settings.freezeTree) return;
 
-
       setSelectedPerson(d);
 
-      if (settings.enableEditMode && f3EditTree && !f3EditTree.isAddingRelative()) {
+      if (
+        settings.enableEditMode &&
+        f3EditTree &&
+        !f3EditTree.isAddingRelative()
+      ) {
         f3EditTree.open(d);
       }
 
       f3Card.onCardClickDefault(e, d);
     };
-
 
     f3Card.setOnCardClick(handleCardClick);
 
@@ -244,8 +154,15 @@ const FamilyTree = ({ chartId, onSelect }) => {
         .editTree()
         .fixed(true)
         .setFields([
-          "first_name", "last_name", "gender", "id",
-          "avatar", "birth_date", "death_date", "is_owner", "status"
+          "first_name",
+          "last_name",
+          "gender",
+          "id",
+          "avatar",
+          "birth_date",
+          "death_date",
+          "is_owner",
+          "status",
         ])
         .setEditFirst(true)
         .setNoEdit();
@@ -259,16 +176,12 @@ const FamilyTree = ({ chartId, onSelect }) => {
 
   return (
     <>
-
-
       <div style={{ textAlign: "right", marginBottom: 10, marginRight: 20 }}>
         <button onClick={() => setShowSettings(true)}>⚙️ Settings</button>
       </div>
 
-
       <div className="f3 f3-cont" id={chartId} ref={containerRef}></div>
 
-      {/* Settings dialog kept for potential future use */}
       <SettingsDialog
         open={showSettings}
         onClose={() => setShowSettings(false)}
