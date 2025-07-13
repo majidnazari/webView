@@ -166,13 +166,13 @@ const App = () => {
       {mode === "merge" && (
         <div style={mergeContainerStyle}>
           <div style={halfWidthStyle}>
-            <PersonForm
+            {/* <PersonForm
               personId={personId}
               setPersonId={setPersonId}
               onSubmit={handleSubmitLeft}
               placeholder="Enter Person ID (Left)"
               buttonText="Show Left Tree"
-            />
+            /> */}
             {submittedId && (
               <FamilyTree
                 chartId="family-tree-left"
@@ -185,13 +185,13 @@ const App = () => {
           </div>
 
           <div style={halfWidthStyle}>
-            <PersonForm
+            {/* <PersonForm
               personId={personId2}
               setPersonId={setPersonId2}
               onSubmit={handleSubmitRight}
               placeholder="Enter Person ID (Right)"
               buttonText="Show Right Tree"
-            />
+            /> */}
             {submittedId2 && (
               <FamilyTree
                 chartId="family-tree-right"
