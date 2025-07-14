@@ -10,7 +10,7 @@ import womanTmp from "../../assets/images/2.jpg";
 import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
 
-const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
+const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSelect }) => {
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
@@ -54,8 +54,8 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
   };
 
 
-
   useEffect(() => {
+
     setSettings((prev) => ({
       ...prev,
       freezeTree: freeze,
@@ -153,22 +153,31 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
       const maleColor = "rgb(173, 216, 230)";  // #add8e6
       const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
 
-      if (mode === "merge") {
+      if (mode === "single" && makeWhiteWhenSelect) {
         const cardInner = e.currentTarget.querySelector(".card-inner.card-image-rect");
 
         if (cardInner && person.gender) {
           const genderColor = person.gender === "M" ? maleColor : femaleColor;
           const currentBg = window.getComputedStyle(cardInner).backgroundColor;
 
+          // Add smooth transitions and base styles (only once)
+          cardInner.style.transition = "all 0.3s ease";
+          cardInner.style.borderRadius = "12px";
+
           if (currentBg === "rgb(255, 255, 255)") {
-            // currently white => select it: set gender color
+            // Change to gender color with no border
             cardInner.style.backgroundColor = genderColor;
+            cardInner.style.border = "none";
+            cardInner.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.1)";
           } else {
-            // currently colored => unselect it: reset to white
+            // Change to white with dashed red border and light glow
             cardInner.style.backgroundColor = "#fff";
+            cardInner.style.border = "2px dashed red";
+            cardInner.style.boxShadow = "0 0 8px rgba(255, 0, 0, 0.2)";
           }
         }
       }
+
 
       // Freeze check
       if (settings.freezeTree) return;
@@ -212,6 +221,27 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
     }
 
     f3Chart.updateTree({ initial: true });
+
+
+    // === Add black ribbon for deceased persons ===
+    const cardNodes = container.querySelectorAll(".card-inner.card-image-rect");
+
+    cardNodes.forEach((node) => {
+      const card = node.closest(".card");
+      if (!card) return;
+
+      const dataId = card.getAttribute("data-id");
+      const person = processedData.find(p => p.data.id === dataId)?.data;
+
+      if (person?.death_date && !node.querySelector(".rip-ribbon")) {
+        const ribbon = document.createElement("div");
+        ribbon.className = "rip-ribbon";
+        ribbon.title = "Deceased";
+        node.appendChild(ribbon);
+      }
+    });
+
+
   }, [treeData, loading, settings]);
 
   return (

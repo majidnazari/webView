@@ -42,7 +42,8 @@ const App = () => {
   const [freezeRightTree, setFreezeRightTree] = useState(false);
   const [maxLevelLeft, setMaxLevelLeft] = useState(3);
   const [maxLevelRight, setMaxLevelRight] = useState(3);
-  
+  const [makeWhiteWhenSelect, setMakeWhiteWhenSelect] = useState(false);
+
 
   // 📨 Flutter config receiver
   useEffect(() => {
@@ -67,6 +68,8 @@ const App = () => {
           setMaxLevelRight(config.maxLevelRight ?? 3);
         } else {
           setMode("single");
+          setMakeWhiteWhenSelect(config.makeWhiteWhenSelect)
+
           setPersonId(config.personIdLeft || "");
           setSubmittedId(config.personIdLeft || "");
           setFreezeSingle(!!config.freezeLeftTree);
@@ -103,13 +106,14 @@ const App = () => {
       <button onClick={() => {
         const testMergeConfig = JSON.stringify({
           token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNjJhNDU0M2YwNTk0NjUwMWE0NzhlMjBlNmM1ODI1NjhlZTI2ZjllNWJkMjBlNzY0NWRmY2JkNWRkNDJjMTU1MDBhYzU5ZDgzMDVmZDg5MmIiLCJpYXQiOjE3NTIzODg1MzguMzMyODAxLCJuYmYiOjE3NTIzODg1MzguMzMyODAyLCJleHAiOjE3NTI2NDc3MzguMzE2MDgsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.YfIuvTJPrnW3FSsQipHpXpqp_uVvDtJs-gNsZqnic169MDW8v9T0_GaybxBx-mrIK7VowEMOLPgNo9Z1KGaOo7W5jDwXbI6RisNPgwZmDhxy4SBDAcCEvYMrvGwQRls9YoCF4fFE-zNSHrtPdjowie99yjjwI5BTaG9uwRLBQJtOj2R-qg91LU0wQcFPsk24Loo5imUUMIBlBPTOsvPQ_3-68NKlMyvIB6gbfySVK38SHRVgrwiLe-yeC2_Rj3BS3Zg7OryfeWGD6HFpZvx1xN1-qtni0axtN8kT8xUkK2Qh6BGGk6ukTc4RuCTZIJj8IFtDbqUNkOvS6EQ2t0IfMopMh7cdUyLEo0dffMkQR7v28Wo8FNeKk0xnnkIWsfDtas8wnGvwfAK9xdkcCdvN3HqNkjh5dnDFP7Q9T6nXuUhkMmZ74XyTjp4fRhiWhiEWE9nfDv8PWzBDr1edI87GKMPKzTlNQm2cCPROjea7M1CltENsSgulwwRNODiwQDhKg7AE5sLSq9CZifX2M-kotjMi1oXz0BaHvPvtCG4A7wsg2MdNxwVDrdSUY8k9E7r_aSOqiJZVH-EJV182bgi841jLYka2ctPSVr8iOh5k6ILLCMIoCwxv-hgGJClAqRYiVBmWmULR7ceJ07dVD5Qw4W4IN1r9Jz1G01kFiSOZgkY",
-          mode: "merge",
+          mode: "single",
           personIdLeft: "1",
           personIdRight: "1",
           freezeLeftTree: true,
           freezeRightTree: true,
           maxLevelLeft: 4,
-          maxLevelRight: 6
+          maxLevelRight: 6,
+          makeWhiteWhenSelect: true
         });
 
         window.receiveMessageFromFlutter?.(testMergeConfig);
@@ -159,6 +163,8 @@ const App = () => {
               freeze={freezeSingle}
               maxLevel={maxLevelLeft}
               mode="single"
+              makeWhiteWhenSelect={makeWhiteWhenSelect}
+
             />
           )}
         </>
@@ -181,6 +187,8 @@ const App = () => {
                 freeze={freezeLeftTree}
                 maxLevel={maxLevelLeft}
                 mode="merge"
+                makeWhiteWhenSelect={makeWhiteWhenSelect}
+
               />
             )}
           </div>
@@ -200,6 +208,8 @@ const App = () => {
                 freeze={freezeRightTree}
                 maxLevel={maxLevelRight}
                 mode="merge"
+                makeWhiteWhenSelect={makeWhiteWhenSelect}
+
               />
             )}
           </div>
