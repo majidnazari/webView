@@ -42,6 +42,7 @@ const App = () => {
   const [freezeRightTree, setFreezeRightTree] = useState(false);
   const [maxLevelLeft, setMaxLevelLeft] = useState(3);
   const [maxLevelRight, setMaxLevelRight] = useState(3);
+  
 
   // 📨 Flutter config receiver
   useEffect(() => {

@@ -11,11 +11,16 @@ import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
 
 const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
-
   const containerRef = useRef(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [selectionOrder, setSelectionOrder] = useState([]); // list of selected person IDs
+  const [selectionOrder, setSelectionOrder] = useState([]);
+
+  const [pairings, setPairings] = useState([]);
+  const [pairingStep, setPairingStep] = useState("left");
+  const [currentPairColor, setCurrentPairColor] = useState(null);
+
+
 
   const [settings, setSettings] = useState({
     orientation: "vertical",
@@ -38,6 +43,17 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
     imageY: "",
     cardDisplayLines: ["first_name", "birth_date,death_date"],
   });
+
+  const getRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+
 
   useEffect(() => {
     setSettings((prev) => ({
@@ -124,35 +140,90 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
       const person = d.data?.data;
       if (!person || !person.id) return;
 
-      // window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
-      //   type: "personSelected",
-      //   personId: person.id,
-      //   fullName: `${person.first_name} ${person.last_name}`,
-      //   gender: person.gender,
-      //   img: person.avatar,
-      //   spouse_ids: null,
-      // }));
+      const cardInner = e.currentTarget.querySelector(".card-inner.card-image-rect");
+      if (!cardInner) return;
 
-      const maleColor = "rgb(173, 216, 230)";  // #add8e6
-      const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
+      const maleDefault = "#E6F2FF";
+      const femaleDefault = "#FCE8F3";
+      const defaultColor = person.gender === "M" ? maleDefault : femaleDefault;
 
-      if (mode === "merge") {
-        const cardInner = e.currentTarget.querySelector(".card-inner.card-image-rect");
+      const personId = person.id;
 
-        if (cardInner && person.gender) {
-          const genderColor = person.gender === "M" ? maleColor : femaleColor;
-          const currentBg = window.getComputedStyle(cardInner).backgroundColor;
+      // Check if already selected in any pair
+      const existingPairIndex = pairings.findIndex(
+        (pair) => pair.leftId === personId || pair.rightId === personId
+      );
 
-          if (currentBg === "rgb(255, 255, 255)") {
-            // currently white => select it: set gender color
-            cardInner.style.backgroundColor = genderColor;
-          } else {
-            // currently colored => unselect it: reset to white
-            cardInner.style.backgroundColor = "#fff";
-          }
+      if (existingPairIndex !== -1) {
+        // Deselect logic
+        const updatedPairings = [...pairings];
+        const pair = updatedPairings[existingPairIndex];
+
+        if (pair.leftId === personId) {
+          pair.leftId = null;
+        } else if (pair.rightId === personId) {
+          pair.rightId = null;
         }
+
+        // If both sides null, remove pair
+        if (!pair.leftId && !pair.rightId) {
+          updatedPairings.splice(existingPairIndex, 1);
+        }
+
+        cardInner.style.backgroundColor = defaultColor;
+
+        setPairings(updatedPairings);
+
+        // If we were waiting on right, and deselected left, reset state
+        if (pairingStep === "right" && pair.leftId === null) {
+          setPairingStep("left");
+          setCurrentPairColor(null);
+        }
+
+        return;
       }
 
+      // Pairing logic
+      if (mode === "merge") {
+        if (pairingStep === "left") {
+          const color = getRandomColor();
+
+          // Color left card
+          cardInner.style.backgroundColor = color;
+
+          setCurrentPairColor(color);
+          setPairings((prev) => [...prev, { leftId: personId, rightId: null, color }]);
+          setPairingStep("right");
+          return;
+        }
+
+        if (pairingStep === "right") {
+          const lastPairIndex = pairings.length - 1;
+          const lastPair = pairings[lastPairIndex];
+
+          // Ignore if last pair is already complete
+          if (!lastPair || lastPair.rightId !== null || !lastPair.leftId) return;
+
+          // Color right card same as left
+          cardInner.style.backgroundColor = lastPair.color;
+
+          const updatedPairings = [...pairings];
+          updatedPairings[lastPairIndex] = {
+            ...lastPair,
+            rightId: personId,
+          };
+
+          setPairings(updatedPairings);
+          setPairingStep("left");
+          setCurrentPairColor(null);
+          return;
+        }
+
+        // ⛔ Block clicking new left if waiting for right
+        return;
+      }
+
+      // Freeze check
       if (settings.freezeTree) return;
 
       setSelectedPerson(d);
@@ -165,10 +236,9 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode }) => {
         f3EditTree.open(d);
       }
 
-
-
       f3Card.onCardClickDefault(e, d);
     };
+
 
     f3Card.setOnCardClick(handleCardClick);
 
