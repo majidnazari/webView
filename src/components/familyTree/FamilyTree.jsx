@@ -44,14 +44,14 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
     cardDisplayLines: ["first_name", "birth_date,death_date"],
   });
 
-  const getRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
+  // const getRandomColor = () => {
+  //   const letters = "0123456789ABCDEF";
+  //   let color = "#";
+  //   for (let i = 0; i < 6; i++) {
+  //     color += letters[Math.floor(Math.random() * 16)];
+  //   }
+  //   return color;
+  // };
 
 
   useEffect(() => {
@@ -141,14 +141,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
       if (!person || !person.id) return;
 
 
-      window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
-        type: "personSelected",
-        personId: person.id,
-        fullName: `${person.first_name} ${person.last_name}`,
-        gender: person.gender,
-        img: person.avatar,
-        spouse_ids: null,
-      }));
+
 
       const maleColor = "rgb(173, 216, 230)";  // #add8e6
       const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
@@ -178,6 +171,14 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
         }
       }
 
+      window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
+        type: "personSelected",
+        personId: person.id,
+        fullName: `${person.first_name} ${person.last_name}`,
+        gender: person.gender,
+        img: person.avatar,
+        spouse_ids: null,
+      }));
 
       // Freeze check
       if (settings.freezeTree) return;

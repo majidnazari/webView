@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import FamilyTree from "./components/familyTree/FamilyTree";
 import { setAuthToken } from "./utils/authToken";
 
-const containerStyle = { padding: 20 };
-const modeSelectorStyle = { marginBottom: 10 };
+const containerStyle = { padding: 5 };
+const modeSelectorStyle = { marginBottom: 5 };
 const mergeContainerStyle = {
   display: "flex",
   flexDirection: "row",
@@ -11,8 +11,8 @@ const mergeContainerStyle = {
   flexWrap: "nowrap",
 };
 const halfWidthStyle = { width: "50%" };
-const formStyle = { marginBottom: 10 };
-const buttonMarginLeft = { marginLeft: 10 };
+const formStyle = { marginBottom: 5 };
+const buttonMarginLeft = { marginLeft: 5 };
 
 const PersonForm = ({ personId, setPersonId, onSubmit, placeholder, buttonText }) => (
   <form onSubmit={onSubmit} style={formStyle}>
@@ -105,7 +105,7 @@ const App = () => {
     <div style={containerStyle}>
       {/* <button onClick={() => {
         const testMergeConfig = JSON.stringify({
-          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDI4ZjA4Mzg5ZDJiNjRhMTIwN2Y4MDkxYTcyM2VhNThlNjk5YjYwZGZmMDgxNGRhM2QwM2JhOTBiN2NjMGU2MzFlNDI0MDExNTIzNzQwNzQiLCJpYXQiOjE3NTI5MjAzMTYuNDc2MDQsIm5iZiI6MTc1MjkyMDMxNi40NzYwNDEsImV4cCI6MTc1MzE3OTUxNi40NzI1MDMsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.FDoCX0asOgXZ4Yh4I0pH5E4-vGNZDKxo2KU9P3Jgykq7L8Zlnl1bXosftNYdAjH2kpsph_hb0EuFppaGRpO4HFnRoTxMsPdb8ss1cgXT93u5ttEtVyvHMRKL6gEscJXKb7VCF4W0H8hKEhlQlhtbFluTSdzD1Uc7rkQMPnP7PeFZYl5NqeEg5_JkRrGt2f_TEYv3c90cAfwo049fxfz9Z_3Du5t3gOZ8GLf-sUqBEslf_XI6enqoGry6W7r76EsD5B8IoqT37q4O43yPw_aC4pW-4-sjGslG88DZBNEStEPd7N9KKheR61Z8zQpM0Qwp_giHnZcSbgMju9b0YnTyiPcdxSnIUuYSr0doxrIHbeyKhooReGs_kllt8c5JgOpuDruLGMXWWfBGrSTcRBaDbzUzesctBWARC4UplUMaJ7zEwkuWV-iKHAg88h0-zg6NSJ08IL5TZmnHIfQ_09GefImxUSL4XRdi5StaecAH3J8RbuSsahp4ZTbPeU0ASZpKmWX4cMYSUVBepeceW4bvq827CaW7Ujg3PdFTjUC8nDtyubYRjWX4XTAAxy7-eThvNScUD_93Q85VJprPJIY9heQ4DV3nQBUxhtUktE1OhBpPNxFWf37Nk3SLwCrI-pbqPUbnNtHI38ZqPCzkRAgLNzmjlkIqv09i7ukZa2oTOjo",
+          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMjY1NGEzMjAzYTYxMjU4NTg4Njc5M2E1MTlkOWI0MDRjNzllMzZkY2QyNTBhYjViODNkODcyMTViMTE5Nzk5MWY5OTI2OWE5Yzc1YWQyNzMiLCJpYXQiOjE3NTI5MjI1MzIuODE5MzcyLCJuYmYiOjE3NTI5MjI1MzIuODE5MzczLCJleHAiOjE3NTMxODE3MzIuODE2NjUzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JDFVeisBsYgfNz94XyaJveOT-POzFbxVT2V-ySK1VVP7YRLaPt2MB8gAoAuYMXiNepn3qHA_xTriMRcN8vKuGvrwzPqC5Aj0Zy4VNF6m7J5e1YE5MTKX4jwnGPruIECwQ1wzugJA0IpvT661roo5rJnZat7ocy5h80CAzxTF3DHemkwoSyGZMRvLS47xeqLyqDVc5yFayGjyrhHNE3FReeO7qD2ueQBkqtCxTX56ERzIj4etwyi4EnWfMc68FLqTIEsYNV4Fch1UmABaTmQhN3MEFDcw8BYj6TMn_uuFUykYGUxpaRa8Iwc17o8Nh5JUJIo9gYrU_LRLth_c3IpoeLtpml2_EApaa3-9sbTGXBGCaMwuT33Hw5ruBRtIaNCoR-LH-bQlSZ19-Aw7GYzJgQ7DMZVCGSAS_DqiZG79HJi_uzyB5M0_fPUB_pi3d5qoeXiov95It_9Pe9b1oPSD43PN1qqVz-BzygUNr39176FDwMNd8sEqBAlfY-qqIlZiwj_4JymMe-Kfe3y43KnraFcNKtJ_p4yP4UzJZj3etVoTxbBUL-E_XdETqOhVuZAJxPA0BGI3woNG_2OE_jUYL7NR288B1Oxi5v1egximflZ5fbyw5zkJGGVgd2zyonnQv4aadFe4SB5C1yEFsUeReG8LRwbqBMXYS2uXc6TlxGg",
           mode: "single",
           personIdLeft: "1",
           personIdRight: "1",
