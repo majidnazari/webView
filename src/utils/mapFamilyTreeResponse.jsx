@@ -1,30 +1,36 @@
+import jalaali from 'jalaali-js';
+
 const mapFamilyTreeResponse = (personData) => {
     const nodes = new Map();
+    const defaultGender = "U"; // Assuming you have this constant elsewhere
+
+    const toShamsi = (dateStr) => {
+        if (!dateStr) return null;
+        const date = new Date(dateStr);
+        if (isNaN(date)) return null;
+        const { jy, jm, jd } = jalaali.toJalaali(date.getFullYear(), date.getMonth() + 1, date.getDate());
+        // return `${jy}/${jm.toString().padStart(2, '0')}/${jd.toString().padStart(2, '0')}`;
+        return jy.toString();
+    };
 
     const addPerson = (person, gender) => {
         if (!person || !person.id) return;
 
         gender = person.gender === 0 ? "F" : person.gender === 1 ? "M" : defaultGender;
-        const extractYear = (dateStr) => {
-            if (!dateStr) return null;
-            return dateStr.toString().slice(0, 4);
-        };
 
         if (!nodes.has(person.id)) {
-
             nodes.set(person.id, {
                 id: person.id,
                 data: {
-                    "id": person.id,
-                    "first_name": person.first_name,
-                    "last_name": person.last_name,
-                    "birth_date": extractYear(person.birth_date),
-                    "death_date": extractYear(person.death_date),
-                    "is_owner": person.is_owner,
-                    "status": person.status,
-                    "avatar": null,
+                    id: person.id,
+                    first_name: person.first_name,
+                    last_name: person.last_name,
+                    birth_date: toShamsi(person.birth_date),
+                    death_date: toShamsi(person.death_date),
+                    is_owner: person.is_owner,
+                    status: person.status,
+                    avatar: null,
                     gender,
-
                 },
                 rels: {},
             });
@@ -46,7 +52,7 @@ const mapFamilyTreeResponse = (personData) => {
     const addChildRelation = (fatherId, motherId, child) => {
         if (!child || !child.id) return;
 
-        addPerson(child, "M"); // Default. Use actual gender if available.
+        addPerson(child, child.gender);
         const childNode = nodes.get(child.id);
         if (fatherId) childNode.rels.father = fatherId;
         if (motherId) childNode.rels.mother = motherId;
@@ -61,7 +67,6 @@ const mapFamilyTreeResponse = (personData) => {
             mother.rels.children = Array.from(new Set([...(mother.rels.children || []), child.id]));
         }
 
-        // Recursively process child's marriages
         if (child.PersonMarriages?.length) {
             child.PersonMarriages.forEach(pm => processMarriage(pm));
         }
@@ -90,7 +95,6 @@ const mapFamilyTreeResponse = (personData) => {
         personData.PersonMarriages.forEach(pm => processMarriage(pm));
     }
 
-    // Ensure root person is included
     addPerson(personData, personData.gender);
 
     return Array.from(nodes.values());

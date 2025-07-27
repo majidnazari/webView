@@ -3,6 +3,11 @@
     background-color: #000000 !important;
     border: 2px solid #180d0d !important;
     padding: 10px;
+
+    max-height: 100vh;
+    height: 100vh;
+    width: 100vw;
+    max-width: 100vw;
 }
 
 /* Override card styles */
@@ -68,4 +73,20 @@
     width: 90px;
     height: 90px;
     object-fit: cover;
+}
+
+.f3 {
+    --text-color: black
+}
+
+
+.rip-ribbon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 25px solid black;
+    border-left: 25px solid transparent;
+    z-index: 10;
 }

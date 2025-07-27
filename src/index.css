@@ -93,4 +93,18 @@ button:focus-visible {
     border-radius: 12px;
   }
 
+
+  .selection-number {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    color: black;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+
 }
