@@ -3,7 +3,7 @@ import { getAuthToken } from "../utils/authToken";
 import { toast } from "react-toastify";
 import config from "../utils/config";
 
-const useAncestryHeads = (depth = 10) => {
+const useAncestryHeads = (depth = 100) => {
     const [heads, setHeads] = useState([]);
     const [loading, setLoading] = useState(true);
     const token = getAuthToken();

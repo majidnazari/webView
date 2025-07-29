@@ -26,7 +26,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
     orientation: "vertical",
     cardXSpacing: 110,
     cardYSpacing: 160,
-    transitionTime: 1000,
+    transitionTime: 100,
     miniTree: true,
     singleParentEmptyCard: true,
     emptyCardLabel: "ADD",

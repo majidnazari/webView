@@ -2,7 +2,7 @@
 .f3.f3-cont {
     background-color: #000000 !important;
     border: 2px solid #180d0d !important;
-    padding: 10px;
+    padding: 1px;
 
     max-height: 100vh;
     height: 100vh;
@@ -44,7 +44,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     border-radius: 3px;
-    padding: 0 5px;
+    padding: 0 1px;
 }
 
 .f3 div.card-image-rect {
