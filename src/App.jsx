@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import FamilyTree from "./components/familyTree/FamilyTree";
 import { setAuthToken } from "./utils/authToken";
 
-const containerStyle = { padding: 5 };
+const containerStyle = { padding: 0 };
 const modeSelectorStyle = { marginBottom: 5 };
 const mergeContainerStyle = {
   display: "flex",
