@@ -58,7 +58,26 @@
     display: revert-layer;
     border-radius: 7px;
     text-align: center;
+
+
 }
+
+.f3 .card-inner.card-image-rect {
+    border-radius: 12px;
+    /* background: linear-gradient(145deg, #ffffff, #e6e6e6); */
+    box-shadow:
+      -3px 6px 20px 2px rgba(22, 20, 41, 0.97),
+      inset 0 0 4px rgba(255, 255, 255, 0.3);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .f3 .card-inner.card-image-rect:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      -3px 10px 30px 3px rgba(22, 20, 41, 0.97),
+      inset 0 0 8px rgba(255, 255, 255, 0.3);
+  }
+  
 
 .f3 div.card-image-rect div.card-label {
     height: 100%;
@@ -80,6 +99,7 @@
     width: 90px;
     height: 90px;
     object-fit: cover;
+
 }
 
 .f3 {
@@ -98,27 +118,27 @@
     z-index: 10;
 }
 
-/* .f3 .link {
+.f3 .link {
     stroke: #1a05b5;
     stroke-width: 3px;
-} */
+}
 
-/* .f3 .link.f3-path-to-main {
+.f3 .link.f3-path-to-main {
     stroke-width: 6px;
     stroke: #b50505;
-} */
+}
 
-/* .f3 div.card:hover .card-inner {
+.f3 div.card:hover .card-inner {
     outline: 6px solid #e31102;
     box-shadow: 0 0 12px #026a78;
-} */
+}
 
 
-/* .f3 div.card-inner.f3-path-to-main {
+.f3 div.card-inner.f3-path-to-main {
     outline: 6px solid orange;
-} */
+}
 
-/* .f3 .f3-card-duplicate-tag {
+.f3 .f3-card-duplicate-tag {
     position: absolute;
     top: 2px;
     right: 2px;
@@ -128,20 +148,21 @@
     border-radius: 50%;
     padding: 2px;
     transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-} */
+}
 
-/* .f3 .f3-card-duplicate-hover .f3-card-duplicate-tag {
+.f3 .f3-card-duplicate-hover .f3-card-duplicate-tag {
     background-color: #de0404;
     color: rgb(5, 22, 1);
-} */
+}
 
-/* .f3 .f3-card-duplicate-hover div.card-inner {
+.f3 .f3-card-duplicate-hover div.card-inner {
     outline: 4px solid #cc0404;
     background-color: rgba(175, 37, 62, 0.935);
 
-} */
+}
 
 
-/* .f3 div.card-main .card-inner {
+.f3 div.card-main div.card-inner {
     outline: 4px solid rgb(23 34 115);
-} */
+    box-shadow: 1px 17px 20px 12px rgba(0, 0, 0, 0.8);
+}

@@ -143,8 +143,11 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
 
 
 
-      const maleColor = "rgb(173, 216, 230)";  // #add8e6
-      const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
+      // const maleColor = "rgb(173, 216, 230)";  // #add8e6
+      // const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
+
+      const maleColor ="#0893c5";// "rgb(173, 216, 230)";  // #a867aa
+      const femaleColor = "#a867aa";//"rgb(255, 182, 193)"; // #0893c5
 
       if (mode === "single" && makeWhiteWhenSelect) {
         const cardInner = e.currentTarget.querySelector(".card-inner.card-image-rect");
