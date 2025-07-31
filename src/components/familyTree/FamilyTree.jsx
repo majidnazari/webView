@@ -146,8 +146,9 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
       // const maleColor = "rgb(173, 216, 230)";  // #add8e6
       // const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
 
-      const maleColor ="#0893c5";// "rgb(173, 216, 230)";  // #a867aa
-      const femaleColor = "#a867aa";//"rgb(255, 182, 193)"; // #0893c5
+      const maleColor = "#51a5c4";// "rgb(173, 216, 230)";  // #a867aa
+      const femaleColor = "#be82bf";//"rgb(255, 182, 193)"; // #0893c5
+
 
       if (mode === "single" && makeWhiteWhenSelect) {
         const cardInner = e.currentTarget.querySelector(".card-inner.card-image-rect");
@@ -164,12 +165,12 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
             // Change to gender color with no border
             cardInner.style.backgroundColor = genderColor;
             cardInner.style.border = "none";
-            cardInner.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.1)";
+            cardInner.style.boxShadow = " -5px 5px 18px 0px rgba(22, 20, 41, 0.97), inset 0 0 4px rgba(255, 255, 255, 0.3);";
           } else {
             // Change to white with dashed red border and light glow
             cardInner.style.backgroundColor = "#fff";
             cardInner.style.border = "2px dashed red";
-            cardInner.style.boxShadow = "0 0 8px rgba(255, 0, 0, 0.2)";
+            cardInner.style.boxShadow = " -5px 5px 18px 0px rgba(22, 20, 41, 0.97), inset 0 0 4px rgba(255, 255, 255, 0.3);";
           }
         }
       }
