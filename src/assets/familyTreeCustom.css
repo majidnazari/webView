@@ -1,6 +1,6 @@
 .f3.f3-cont {
     background-color: #F5F5F5 !important;
-    border: 2px solid #180d0d !important;
+    border: 0px solid #180d0d !important;
     padding: 1px;
 
     max-height: 100vh;
@@ -104,7 +104,7 @@
 
 .f3 .link.f3-path-to-main {
     stroke-width: 5px;
-    stroke:  black;
+    stroke: black;
 }
 
 .f3 div.card:hover .card-inner {
@@ -140,4 +140,4 @@
     border-radius: 12px;
     box-shadow: -5px 5px 18px 0px rgba(22, 20, 41, 0.97), inset 0 0 4px rgba(255, 255, 255, 0.3);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  }
+}
