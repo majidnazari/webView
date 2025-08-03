@@ -41,7 +41,9 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
     imageHeight: 90,
     imageX: "",
     imageY: "",
-    cardDisplayLines: ["first_name", "birth_date,death_date"],
+    // cardDisplayLines: ["first_name", "birth_date,death_date"],
+    cardDisplayLines: ["first_name", "birth_date_display", "death_date_display"],
+
   });
 
   // const getRandomColor = () => {
@@ -215,6 +217,8 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
           "avatar",
           "birth_date",
           "death_date",
+          "birth_date_display",
+          "death_date_display",
           "is_owner",
           "status",
         ])
@@ -238,7 +242,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
       const dataId = card.getAttribute("data-id");
       const person = processedData.find(p => p.data.id === dataId)?.data;
 
-      if (person?.death_date && !node.querySelector(".rip-ribbon")) {
+      if (person?.death_date_display && !node.querySelector(".rip-ribbon")) {
         const ribbon = document.createElement("div");
         ribbon.className = "rip-ribbon";
         ribbon.title = "Deceased";

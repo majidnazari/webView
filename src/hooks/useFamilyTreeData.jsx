@@ -19,7 +19,15 @@ const generatePersonMarriageFragment = (depth) => {
                 last_name
                 gender
                 birth_date
+
+                birth_calendar
+                birth_year
+                death_calendar
+                death_year
+
                 death_date
+
+
                 is_owner
                 status
             }
@@ -30,6 +38,10 @@ const generatePersonMarriageFragment = (depth) => {
                 gender
                 birth_date
                 death_date
+                birth_calendar
+                birth_year
+                death_calendar
+                death_year
                 is_owner
                 status
             }
@@ -40,6 +52,10 @@ const generatePersonMarriageFragment = (depth) => {
                 gender
                 birth_date
                 death_date
+                birth_calendar
+                birth_year
+                death_calendar
+                death_year
                 is_owner
                 status
                 ${generatePersonMarriageFragment(depth - 1)}
@@ -69,7 +85,15 @@ const useFamilyTreeData = (personId, maxLevel = 2) => {
                             gender
                             mobile
                             birth_date
+
+                            birth_calendar
+                            birth_year
+
                             death_date
+
+                            death_calendar
+                            death_year
+
                             is_owner
                             status
                             ${generatePersonMarriageFragment(maxLevel)}
@@ -96,11 +120,11 @@ const useFamilyTreeData = (personId, maxLevel = 2) => {
 
                 if (result?.data?.getPerson) {
                     const mapped = mapFamilyTreeResponse(result.data.getPerson);
-                   // console.log("mapped is:", mapped);
+                    // console.log("mapped is:", mapped);
                     setTreeData(mapped);
                 }
             } catch (error) {
-               // console.error("Failed to fetch family tree:", error);
+                // console.error("Failed to fetch family tree:", error);
             } finally {
                 setLoading(false);
             }
