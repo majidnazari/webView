@@ -101,7 +101,7 @@ const useFamilyTreeData = (personId, maxLevel = 2) => {
                     }
                 `;
                 {
-                    // console.log("the final query is :" , query)
+                    console.log("the final query is :", query)
                 }
                 const response = await fetch(config.GRAPHQL_ENDPOINT, {
                     method: "POST",
