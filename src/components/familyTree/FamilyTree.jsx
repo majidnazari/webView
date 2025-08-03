@@ -41,7 +41,9 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
     imageHeight: 90,
     imageX: "",
     imageY: "",
-    cardDisplayLines: ["first_name", "birth_date,death_date"],
+    // cardDisplayLines: ["first_name", "birth_date,death_date"],
+    cardDisplayLines: [["first_name"], ["birth_date_display", "death_date_display"]],
+
   });
 
   // const getRandomColor = () => {
@@ -111,9 +113,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
     const f3Card = f3Chart
       .setCard(f3.CardHtml)
       .setCardDisplay(
-        settings.cardDisplayLines.map((line) =>
-          line.split(",").map((f) => f.trim()).filter(Boolean)
-        )
+        settings.cardDisplayLines
       )
       .setMiniTree(settings.miniTree)
       .setStyle(settings.cardStyle)
@@ -165,10 +165,13 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
             // Change to gender color with no border
             cardInner.style.backgroundColor = genderColor;
             cardInner.style.border = "none";
+            cardInner.style.color = "#fff";
+
             cardInner.style.boxShadow = " -5px 5px 18px 0px rgba(22, 20, 41, 0.97), inset 0 0 4px rgba(255, 255, 255, 0.3);";
           } else {
             // Change to white with dashed red border and light glow
             cardInner.style.backgroundColor = "#fff";
+            cardInner.style.color = "#000";
             cardInner.style.border = "2px dashed red";
             cardInner.style.boxShadow = " -5px 5px 18px 0px rgba(22, 20, 41, 0.97), inset 0 0 4px rgba(255, 255, 255, 0.3);";
           }
@@ -215,6 +218,8 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
           "avatar",
           "birth_date",
           "death_date",
+          "birth_date_display",
+          "death_date_display",
           "is_owner",
           "status",
         ])
@@ -238,7 +243,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
       const dataId = card.getAttribute("data-id");
       const person = processedData.find(p => p.data.id === dataId)?.data;
 
-      if (person?.death_date && !node.querySelector(".rip-ribbon")) {
+      if (person?.death_date_display && !node.querySelector(".rip-ribbon")) {
         const ribbon = document.createElement("div");
         ribbon.className = "rip-ribbon";
         ribbon.title = "Deceased";
