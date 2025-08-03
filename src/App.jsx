@@ -105,13 +105,13 @@ const App = () => {
     <div style={containerStyle}>
       <button onClick={() => {
         const testMergeConfig = JSON.stringify({
-          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMGY5YTMyYjk2YWQ1NzVmMDMyYTAzOWNmNTViYWY5Mzg0MTYxM2ZiMzQzM2MzZTg2NmFhMjk0MDBmNmY2YWY1NTY0MDczYjY5NjBlNDk1OTIiLCJpYXQiOjE3NTQyMTY4NjYuNjExMTE4LCJuYmYiOjE3NTQyMTY4NjYuNjExMTE5LCJleHAiOjE3NTQ0NzYwNjYuNTk3NTgzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.dM7A1AI9PzNYD0h9-CVN_FxQIahEI-nyV5Xw1lCkbzjAMzUuHMl8lRBol0C3ptdfaeVYFnEiYdKGQPD60mh96fRe1hgNc9FII8TjooubJA7q8DPQWBGfJTSr9O9KVmN4qI77Z3HQwx9_Q6zzpK3EP-564eL7ArUIOT9y7h4UhFZ0Lx56cWDLaKS6c9Ie_dmKHlcy5Zl_Pw5MMxjjUM55rSwPz5GfTw5XpYlq9t8keTVqlDWjwvsqg56y1_zNzCUfJzu8sHRO4dl9CbbgkKiAnnHwVLEVatFhc7HnZSlzNJ09jabJLBKv0nOdq9P4n-cNXfs0jIeg2YS_jJT6qYRphJR4C1ObIVmmzYh5K-83-gLzzkXKv3M96dKgyi1rrQ36m4f3xCPC1s8AOo1gJ9yVLigQgJFjEjjmgnJP22UjhNaBIpoPulODgPtNJ5loBQg3B8wj_NPv-qZ8ejJPsYQInlmfAIH4BLrJsIPkuZHdc-__k5Yja9_0JAp4xDXHVqGzl1nrBTKpCAibqZsEMlee9o7GKYRP_Ra8AdNPYx4lNCexTbhKl2426B8b0V06SuOxTPUTBJ74e5jpwR_KrEEyjsd0Rt9_QF2Jvqe15H69HA5igAvtGQK6htChfGhzHyayJmAqB2hvibCwOlHhfMNacXJJpb77Z7PiANIssGhI3Mk",
+          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjBjZjBhOTJjZTFkZGM3ZmQ3ZGZiMjMxODUzZDUwMzI4NDU2NGVkMjc4MmE4MjI4NjJkZmRlNjIwZGY0ZWRhY2U5NjQzMjBhZWY5YTlmYjkiLCJpYXQiOjE3NTQyMTk2MjEuMDAwNTYzLCJuYmYiOjE3NTQyMTk2MjEuMDAwNTYzLCJleHAiOjE3NTQ0Nzg4MjAuOTc4ODc3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.eD_8v5mvtr-cVaCezpOM8Y9UFKZTFdamQM_LlPJVibm2p-ltecqJmZThXfQvKuCaFaf9FSQS9BJxgy6N8VSeQ3aTCCGLJ1iko2Jv509Io9Cqw0js98j9Q6wxidFcZivgmtgMkUum64Csn9cl2EgqcXyuh6Bpm-GhR0Sw_Vpg4W3womRPrYmdANEj3axxn1tSseBLZNpSHoFBlNtAiKBNT4Z9XKuK97lpns61S76Gcn-lcmAE11PfqX9m1EGiXxF8OIvRvsuMPDWovj644QfZdP_AidaP4NIdc_n6rAU-QjFnfIwuXzX94cpyXkejA5Wp2M4b5yoFjOXWH4FXYsBifQJz9zrerqxskiBKVr-42ppLlgre5XNJhbV4f5bpZFKhqDlMg9CSOuupPinK0ZKzi-6qL0bEUkubEZJp8OxAXeImk0j8zY68nxU0JFG8iIaCMogJFGTOTBXL9oNHBz15K7jOpg1HdGyDwiZyh0REO1bgSlNofWQ9HMVLAqkP33JiTn0E8b6R5LRwRPeOq7Q5Gj2DRBhz1DOZusbvPGEHqRCy_rroPfaUmzb74yMD0wSzXYQr0xsOscUIDLczIwO3AoPXZcJlA27TPpx5OU0buj1iRRICwGh9S4flvJVcTvBIBCujulv9mT7bjP6gmEuPLOcRNCODCwgYU8t8BVI8uvU",
           mode: "single",
-          personIdLeft: "296",
+          personIdLeft: "520",
           personIdRight: "1",
           freezeLeftTree: true,
           freezeRightTree: true,
-          maxLevelLeft: 1,
+          maxLevelLeft: 120,
           maxLevelRight: 2,
           makeWhiteWhenSelect: true
         });

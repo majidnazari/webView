@@ -7,7 +7,7 @@ const mapFamilyTreeResponse = (personData) => {
   // Updated calendar-based formatter
   const formatDate = (calendar, year, dateStr) => {
     if ((calendar === "BH" || calendar === 2) && year) {
-      return `${year}`;
+      return `${-year}`;
     } else if ((calendar === "Gregorian" || calendar === 1) && dateStr) {
       const date = new Date(dateStr);
       if (isNaN(date)) return null;
@@ -40,8 +40,8 @@ const mapFamilyTreeResponse = (personData) => {
           last_name: person.last_name,
           birth_date: person.birth_date,
           death_date: person.death_date,
-          birth_date_display: birthDisplay || 100,
-          death_date_display: deathDisplay || 100,
+          birth_date_display: birthDisplay || null,
+          death_date_display: deathDisplay || null,
           is_owner: person.is_owner,
           status: person.status,
           avatar: null,
