@@ -38,7 +38,7 @@ const mapFamilyTreeResponse = (personData) => {
           id: person.id,
           first_name:
             person.first_name && person.first_name.length > 10
-              ?  "-" + person.first_name.slice(0, 10) 
+              ? ".." + person.first_name.slice(0, 10)
               : person.first_name,
           last_name: person.last_name,
           birth_date: person.birth_date,
