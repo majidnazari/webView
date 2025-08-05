@@ -140,9 +140,6 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
       const person = d.data?.data;
       if (!person || !person.id) return;
 
-
-
-
       // const maleColor = "rgb(173, 216, 230)";  // #add8e6
       // const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
 
