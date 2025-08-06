@@ -141,3 +141,39 @@
     box-shadow: -5px 5px 18px 0px rgba(22, 20, 41, 0.97), inset 0 0 4px rgba(255, 255, 255, 0.3);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
+
+
+.hacked-text {
+    font-size: 1.1rem;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+    text-shadow:
+        0 0 3px #f5d76e,
+        0 0 8px #f5d76e,
+        0 0 15px #fff,
+        0 0 20px #ffcc00;
+    animation: flicker 4s infinite;
+    z-index: 2;
+    position: relative;
+}
+
+@keyframes flicker {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    40% {
+        opacity: 0.85;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 0.6;
+    }
+}
