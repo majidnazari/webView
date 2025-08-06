@@ -174,16 +174,16 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
             cardInner.style.boxShadow = " -5px 5px 18px 0px rgba(22, 20, 41, 0.97), inset 0 0 4px rgba(255, 255, 255, 0.3);";
           }
         }
-        if (person.id == 519) {
+        // if (person.id == 519) {
 
-          cardInner.style.backgroundImage = `url(${golden})`;
-          const textLines = cardInner.querySelectorAll(".card-text-line");
+        //   cardInner.style.backgroundImage = `url(${golden})`;
+        //   const textLines = cardInner.querySelectorAll(".card-text-line");
 
-          textLines.forEach((line) => {
-            line.classList.add("hacked-text");
-          });
-          return;
-        }
+        //   textLines.forEach((line) => {
+        //     line.classList.add("hacked-text");
+        //   });
+        //   return;
+        // }
       }
 
       window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({

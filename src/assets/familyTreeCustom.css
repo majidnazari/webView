@@ -1,3 +1,19 @@
+@font-face {
+    font-family: 'vazir';
+    src: url('./fonts/Vazirmatn-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'vazir';
+    src: url('./fonts/Vazirmatn-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+
+
 .f3.f3-cont {
     background-color: #F5F5F5 !important;
     border: 0px solid #180d0d !important;
@@ -26,6 +42,8 @@
 
 /* Change text color */
 .f3 .f3-card .f3-text {
+
+    /* font-family: 'B Nazanin', tahoma !important; */
     color: #2a2a2a !important;
     font-weight: bold;
 }
@@ -143,7 +161,7 @@
 }
 
 
-.hacked-text {
+/* .hacked-text {
     font-size: 1.1rem;
     font-weight: bold;
     font-family: 'Courier New', monospace;
@@ -176,4 +194,28 @@
     60% {
         opacity: 0.6;
     }
+} */
+
+.f3.f3-cont {
+    background-color: #F5F5F5 !important;
+    border: 0px solid #180d0d !important;
+    padding: 1px;
+
+    max-height: 100vh;
+    height: 100vh;
+    width: 100vw;
+    max-width: 100vw;
+
+    --female-color: #be82bf !important;
+    --male-color: #51a5c4 !important;
+    --genderless-color: #d3d3d3 !important;
+    --background-color: #fff !important;
+    --text-color: #f4ecec !important;
+    text-shadow: -1px 1px 1px rgba(0, 0, 0, 0.5), 1px -1px 2px rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+}
+
+.f3 {
+    --text-color: black;
+   font-family: 'vazir1', sans-serif;
 }
