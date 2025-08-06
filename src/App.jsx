@@ -105,13 +105,13 @@ const App = () => {
     <div style={containerStyle}>
       <button onClick={() => {
         const testMergeConfig = JSON.stringify({
-          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjBjZjBhOTJjZTFkZGM3ZmQ3ZGZiMjMxODUzZDUwMzI4NDU2NGVkMjc4MmE4MjI4NjJkZmRlNjIwZGY0ZWRhY2U5NjQzMjBhZWY5YTlmYjkiLCJpYXQiOjE3NTQyMTk2MjEuMDAwNTYzLCJuYmYiOjE3NTQyMTk2MjEuMDAwNTYzLCJleHAiOjE3NTQ0Nzg4MjAuOTc4ODc3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.eD_8v5mvtr-cVaCezpOM8Y9UFKZTFdamQM_LlPJVibm2p-ltecqJmZThXfQvKuCaFaf9FSQS9BJxgy6N8VSeQ3aTCCGLJ1iko2Jv509Io9Cqw0js98j9Q6wxidFcZivgmtgMkUum64Csn9cl2EgqcXyuh6Bpm-GhR0Sw_Vpg4W3womRPrYmdANEj3axxn1tSseBLZNpSHoFBlNtAiKBNT4Z9XKuK97lpns61S76Gcn-lcmAE11PfqX9m1EGiXxF8OIvRvsuMPDWovj644QfZdP_AidaP4NIdc_n6rAU-QjFnfIwuXzX94cpyXkejA5Wp2M4b5yoFjOXWH4FXYsBifQJz9zrerqxskiBKVr-42ppLlgre5XNJhbV4f5bpZFKhqDlMg9CSOuupPinK0ZKzi-6qL0bEUkubEZJp8OxAXeImk0j8zY68nxU0JFG8iIaCMogJFGTOTBXL9oNHBz15K7jOpg1HdGyDwiZyh0REO1bgSlNofWQ9HMVLAqkP33JiTn0E8b6R5LRwRPeOq7Q5Gj2DRBhz1DOZusbvPGEHqRCy_rroPfaUmzb74yMD0wSzXYQr0xsOscUIDLczIwO3AoPXZcJlA27TPpx5OU0buj1iRRICwGh9S4flvJVcTvBIBCujulv9mT7bjP6gmEuPLOcRNCODCwgYU8t8BVI8uvU",
+          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYTQzNWNlNDM2NjQ5Y2FmYzE1ZDhhNGY4YTJmYjM1ZjY3YmFiOGNlNGFhZWE0MmVjYzVlOTUwNzIxNjhiNGY2N2NiZDYxZTZkZmU3MGQ2ZTIiLCJpYXQiOjE3NTQzODQ4OTguMzQ4Nzk3LCJuYmYiOjE3NTQzODQ4OTguMzQ4Nzk4LCJleHAiOjE3NTQ2NDQwOTguMzM1ODU0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.YMuhmWnGdbQriWvt_EkdZVx7sGZ7fF3Z7kuZMHOClgdWMms-yiCPbqEg-zX0t0V3y1_VrlfEafl3mzs2OBcGDCP0h_BnXjbhNaWaQX_1If13WLqXcIt7LwUzLw_SbPEphvDj4B1P6RqNV_yZTU3JuFOzEpj7VUHscbQiCV_Vabe3TasyuSJM8gcsHSG7sQobrSD_cL8lD0B81Pc6XUys8g7HJI62wwB3H-s-Axhxbf7JDPa3cdhkbtypPI08n-QQX3qBwiT0vdg9WLTP7vdkEMFCfK4KD6YMZt44aCdnAlPK5n63RFhi983Im2kCGN2D_AqpccRbxhwaYwrgSTQwMNOGZVAuZ3PzAjgZhRy5IVG2EpA8krZw4lDSCsCL_3-LdJOAAu1a2Y6EG4yTgqDyBI_FlKWti4T-FecXCSl_OK7kjREdLzHCkwggA5uGM7KlaC2NXLwRbG4vCDSg3wyOoTvYvrFaDrqcibgx7rZrjkk5ViKa5EUYQ9_47ZyyD9Ff6xMCxRac1XXeSqXfKh08whwUOwPlx5_yhiynfcBA2-TX25ajqZJ0bTH6ParX6viky4_gWBszk-5U2fsqgOK1Z-iXwUjvrpKIbGeluU3qF9p6MU90C9NK1aoIAo0Za-csZqa8DCIPw6N4A5ehw5SzDCdMMVg6XfQoZuL9tvdP3lA",
           mode: "single",
           personIdLeft: "520",
           personIdRight: "1",
           freezeLeftTree: true,
           freezeRightTree: true,
-          maxLevelLeft: 120,
+          maxLevelLeft: 4,
           maxLevelRight: 2,
           makeWhiteWhenSelect: true
         });

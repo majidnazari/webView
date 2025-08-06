@@ -7,6 +7,7 @@ import SettingsDialog from "./settingDialog/SettingsDialog";
 
 import manTmp from "../../assets/images/1.jpg";
 import womanTmp from "../../assets/images/2.jpg";
+import golden from "../../assets/images/12.jpg";
 import avater_male from "../../assets/images/avater_male.jpg";
 import avatar_female from "../../assets/images/avatar_female.jpg";
 
@@ -140,9 +141,6 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
       const person = d.data?.data;
       if (!person || !person.id) return;
 
-
-
-
       // const maleColor = "rgb(173, 216, 230)";  // #add8e6
       // const femaleColor = "rgb(255, 182, 193)"; // #ffb6c1
 
@@ -176,6 +174,16 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
             cardInner.style.boxShadow = " -5px 5px 18px 0px rgba(22, 20, 41, 0.97), inset 0 0 4px rgba(255, 255, 255, 0.3);";
           }
         }
+        // if (person.id == 519) {
+
+        //   cardInner.style.backgroundImage = `url(${golden})`;
+        //   const textLines = cardInner.querySelectorAll(".card-text-line");
+
+        //   textLines.forEach((line) => {
+        //     line.classList.add("hacked-text");
+        //   });
+        //   return;
+        // }
       }
 
       window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
