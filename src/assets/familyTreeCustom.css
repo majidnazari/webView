@@ -12,6 +12,12 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'BNazanin';
+    src: url('./fonts/BNAZANB.woff') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
 
 
 .f3.f3-cont {
@@ -217,5 +223,5 @@
 
 .f3 {
     --text-color: black;
-   font-family: 'vazir1', sans-serif;
+   font-family: 'BNazanin', sans-serif;
 }
