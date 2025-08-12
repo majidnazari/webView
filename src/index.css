@@ -108,3 +108,12 @@ button:focus-visible {
 
 
 }
+
+body {
+  pointer-events: none;
+  touch-action: pinch-zoom;
+}
+
+.scrollable-element {
+  pointer-events: auto;
+}
