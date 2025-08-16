@@ -8,8 +8,8 @@ import SettingsDialog from "./settingDialog/SettingsDialog";
 import manTmp from "../../assets/images/1.jpg";
 import womanTmp from "../../assets/images/2.jpg";
 import golden from "../../assets/images/12.jpg";
-import avater_male from "../../assets/images/avater_male.jpg";
-import avatar_female from "../../assets/images/avatar_female.jpg";
+import avater_male from "../../assets/images/avater_male.png";
+import avatar_female from "../../assets/images/avatar_female.png";
 
 const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSelect }) => {
   const containerRef = useRef(null);
