@@ -139,6 +139,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
     const handleCardClick = (e, d) => {
       if (!d || !d.data) return;
       const person = d.data?.data;
+      //console.log("d.date is :" , d.data?.data);
       if (!person || !person.id) return;
 
       // const maleColor = "rgb(173, 216, 230)";  // #add8e6
@@ -186,7 +187,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
         // }
       }
 
-      alert( person.first_name +" " + person.last_name);
+     // alert( person.first_name +" " + person.last_name);
       window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
         type: "personSelected",
         personId: person.id,

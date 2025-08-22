@@ -103,11 +103,11 @@ const App = () => {
 
   return (
     <div style={containerStyle}>
-      <button onClick={() => {
+      {/* <button onClick={() => {
         const testMergeConfig = JSON.stringify({
           token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzljMDJiYzcyZDI2Y2EwZGEwNzUzYTAwOTZiMmEzNTcyZGZmOTEwYzJjZmEwMWE4MDU5OGE0ODcwNWJiYjk3MzcyMWQzZDg1OTdjNGI0NzQiLCJpYXQiOjE3NTU4ODA5MTcuMDg4OTQ3LCJuYmYiOjE3NTU4ODA5MTcuMDg4OTQ5LCJleHAiOjE3NTYxNDAxMTcuMDgxMzEzLCJzdWIiOiIxMCIsInNjb3BlcyI6W119.bKghVLhpCekzxy_Hs-BRrMUJYXQGRdxiJj63HtCqeKUfYCXELamBl2tIaQa3eHGjo_eRiHP5_O4pZF1zNVssr7cpmcVGcFjQ9l8BwbdPCoKeEXGOxv3OrfVNV3nOHwJTHFOFGEN5CjYsAO1VirUHQ-ZfXFcRBK0jDX5di5yTqoC2CWdEn2QlfWGc8EwMssYZJj1ZDThYZREnJ1qwRBzqMFArAEWtgesrf6NRMxXYtR6fjulVAibMoaTZZ3qvgBFXxHWXnzfDtx2TAqXkw1To1bAze3wsMpoRM_tvqLCPhUlONGxcqTjrOhOWocOoPJCWFRq_z98_7Dx2lodwR6_z3fhi4Tvg67xwjlGT_6m-ALoK4A2UwjiuSZ9EB3VSkYtauKxNnhMv6OrglMIXQTDLPnoaTAoajk0JFpmjYRsXpZxJAra4bFeQjlHeq3v0QZ8M26vekl02Of6l1u5TxI48xeqTQHinXEPqUs9_ZLWtMIkH6-mjKxaIR_9TtpcgVSDBefwbY2t6Ywyyip1erwtTv91mXXor8oi41wEGEMaGfJGzFcmnOQwYSwFFMS_kMc7rXLH4cv3anas3P7gPlDpQVYHUapegNKQN0893wT36_sn06TOhN-webSEHMin6M4sn5bOm3ECiFpLPnxca7ZKsgBWJRZ7taucHUZPUoU3U_wM",
           mode: "single",
-          personIdLeft: "614",
+          personIdLeft: "1",
           personIdRight: "1",
           freezeLeftTree: true,
           freezeRightTree: true,
@@ -119,7 +119,7 @@ const App = () => {
         window.receiveMessageFromFlutter?.(testMergeConfig);
       }}>
         🔄 Trigger Merge Mode Test
-      </button>
+      </button> */}
 
       {/* <h2>Family Tree Viewer</h2> */}
 

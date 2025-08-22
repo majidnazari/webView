@@ -82,6 +82,7 @@ const useFamilyTreeData = (personId, maxLevel = 2) => {
                         getPerson(id: "${personId}") {
                             id
                             first_name
+                            last_name
                             gender
                             mobile
                             birth_date
