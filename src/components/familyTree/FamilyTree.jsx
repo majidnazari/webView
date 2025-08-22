@@ -186,6 +186,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
         // }
       }
 
+      alert( person.first_name +" " + person.last_name);
       window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
         type: "personSelected",
         personId: person.id,

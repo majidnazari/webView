@@ -103,15 +103,15 @@ const App = () => {
 
   return (
     <div style={containerStyle}>
-      {/* <button onClick={() => {
+      <button onClick={() => {
         const testMergeConfig = JSON.stringify({
-          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiN2U5NzFlZGNlZDYzMmYyODkwNTJjZTAwMzk1ZDM1MzNhNGUxMjc5OWY1YzU4Y2Q1NGNlMmNhNTc0MDI5MmZmNGE3ZjY1YjYwYWM5NzhiY2UiLCJpYXQiOjE3NTUzMjY2NTYuOTM2NjU1LCJuYmYiOjE3NTUzMjY2NTYuOTM2NjU1LCJleHAiOjE3NTU1ODU4NTYuOTMxOCwic3ViIjoiMSIsInNjb3BlcyI6W119.tkek9xBm9Ug6lKLxEeSZzZfsVICT9xITHy5I-0QHxzX5NXKd7yzUpU8fWwz3UB94vygalz95Pl6e9Hu-S842aG4639EkWXC1fzSXL7HuHT036YBzWCICS_cEirhayU5yys4o_nJN45HaNjaILgfB9zceIxHnQaIwn5-xO65UUO0_g1mpMsxTPrVKRA7o2fkeskVBXcJvj1VsnHrtbhhZQr15gU66CYjxEv_rL7zozHz3ldpCFclrk34LC1uqxIGOPdhs0BR8ZUk-UdVsUPlCxO5jF4DjHnu15vd9xNJNBWd6QEKhbHx9vh-k1X7Db6MMDvAxyQsdosjB7-7Nhxw202OxjIOYDZ1OS59v_Wf2WBqj91vw7qILKSZndmt4HVM__B_X2Bi5XZqV_RuUwXmpPHsJgPrRs0r7MkmhHIOxnUIH-jETXER3R6SLZRF4TvFszzDggdjt9eA2moj1SZXtSLWfrNYKRCMA-4iZ9gysh-2-Q-yLdNI1lqkI4FIo0eKaZueCZ3faysqpaGbu67zwZmGhHxvarwj7fcMAnvJ6njW-_xKagHYVi2lgbjFhKD5nAUi0ki6vxLCK3MdhXNZ0pSCg-zZxmmcFw3baz82lrY4DzKIIkIKjA0tAijTqtQjeMsTJNxh3Na6rt6pakw4fP3TI-N73PAC1u05FbtAvGSo",
+          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzljMDJiYzcyZDI2Y2EwZGEwNzUzYTAwOTZiMmEzNTcyZGZmOTEwYzJjZmEwMWE4MDU5OGE0ODcwNWJiYjk3MzcyMWQzZDg1OTdjNGI0NzQiLCJpYXQiOjE3NTU4ODA5MTcuMDg4OTQ3LCJuYmYiOjE3NTU4ODA5MTcuMDg4OTQ5LCJleHAiOjE3NTYxNDAxMTcuMDgxMzEzLCJzdWIiOiIxMCIsInNjb3BlcyI6W119.bKghVLhpCekzxy_Hs-BRrMUJYXQGRdxiJj63HtCqeKUfYCXELamBl2tIaQa3eHGjo_eRiHP5_O4pZF1zNVssr7cpmcVGcFjQ9l8BwbdPCoKeEXGOxv3OrfVNV3nOHwJTHFOFGEN5CjYsAO1VirUHQ-ZfXFcRBK0jDX5di5yTqoC2CWdEn2QlfWGc8EwMssYZJj1ZDThYZREnJ1qwRBzqMFArAEWtgesrf6NRMxXYtR6fjulVAibMoaTZZ3qvgBFXxHWXnzfDtx2TAqXkw1To1bAze3wsMpoRM_tvqLCPhUlONGxcqTjrOhOWocOoPJCWFRq_z98_7Dx2lodwR6_z3fhi4Tvg67xwjlGT_6m-ALoK4A2UwjiuSZ9EB3VSkYtauKxNnhMv6OrglMIXQTDLPnoaTAoajk0JFpmjYRsXpZxJAra4bFeQjlHeq3v0QZ8M26vekl02Of6l1u5TxI48xeqTQHinXEPqUs9_ZLWtMIkH6-mjKxaIR_9TtpcgVSDBefwbY2t6Ywyyip1erwtTv91mXXor8oi41wEGEMaGfJGzFcmnOQwYSwFFMS_kMc7rXLH4cv3anas3P7gPlDpQVYHUapegNKQN0893wT36_sn06TOhN-webSEHMin6M4sn5bOm3ECiFpLPnxca7ZKsgBWJRZ7taucHUZPUoU3U_wM",
           mode: "single",
-          personIdLeft: "520",
+          personIdLeft: "614",
           personIdRight: "1",
           freezeLeftTree: true,
           freezeRightTree: true,
-          maxLevelLeft: 130,
+          maxLevelLeft: 3,
           maxLevelRight: 2,
           makeWhiteWhenSelect: true
         });
@@ -119,7 +119,7 @@ const App = () => {
         window.receiveMessageFromFlutter?.(testMergeConfig);
       }}>
         🔄 Trigger Merge Mode Test
-      </button> */}
+      </button>
 
       {/* <h2>Family Tree Viewer</h2> */}
 
