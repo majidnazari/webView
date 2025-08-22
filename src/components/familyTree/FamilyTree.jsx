@@ -137,6 +137,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
     let f3EditTree = null;
 
     const handleCardClick = (e, d) => {
+    
       if (!d || !d.data) return;
       const person = d.data?.data;
       if (!person || !person.id) return;
@@ -185,6 +186,8 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
         //   return;
         // }
       }
+
+      alert(`${person.first_name} ${person.last_name}`);
 
       window.flutter_inappwebview.callHandler("FlutterBridge", JSON.stringify({
         type: "personSelected",
