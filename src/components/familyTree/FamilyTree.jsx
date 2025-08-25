@@ -8,7 +8,7 @@ import SettingsDialog from "./settingDialog/SettingsDialog";
 import manTmp from "../../assets/images/1.jpg";
 import womanTmp from "../../assets/images/2.jpg";
 import golden from "../../assets/images/12.jpg";
-import avater_male from "../../assets/images/avater_male.png";
+import avatar_male from "../../assets/images/avatar_male.png";
 import avatar_female from "../../assets/images/avatar_female.png";
 
 const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSelect }) => {
@@ -89,7 +89,7 @@ const FamilyTree = ({ chartId, personId, freeze, maxLevel, mode, makeWhiteWhenSe
       } else if (id === "4") {
         person.data.avatar = womanTmp;
       } else if (!avatar) {
-        person.data.avatar = gender === "M" ? avater_male : avatar_female;
+        person.data.avatar = gender === "M" ? avatar_male : avatar_female;
       }
 
       return person;
